@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Grupo Conta — Estudio contable en La Plata. Servicios de contabilidad, impuestos, sueldos y asesoramiento para pymes y monotributistas."/>
+  <title>Grupo Conta | Estudio Contable</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #E8EEEC;
+      --surface:   #D6E2DE;
+      --ink:       #142820;
+      --ink-light: #2D3F39;
+      --teal:      #1B5C6B;
+      --teal-dark: #124450;
+      --green:     #2D8045;
+      --line:      rgba(27,92,107,0.12);
+      --serif:     'Cormorant Garamond', serif;
+      --sans:      'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 60px;
+      background: #E8EEEC;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo svg { height: 44px; width: auto; }
+    .nav-logo-text {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+      color: var(--teal);
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-light); text-decoration: none; transition: color 0.2s;
+      font-weight: 400;
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 60px 80px; gap: 60px;
+      background:
+        linear-gradient(rgba(232,238,236,0.88), rgba(214,226,222,0.85)),
+        url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&auto=format&fit=crop&q=80') center/cover no-repeat fixed;
+    }
+    .hero-text { animation: fadeUp 0.9s 0.1s both; }
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 20px; font-weight: 500;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 300; line-height: 1.08;
+      margin-bottom: 28px; color: var(--ink);
+    }
+    .hero-title em { font-style: italic; color: var(--teal); }
+    .hero-subtitle {
+      font-size: 1rem; color: var(--ink-light);
+      max-width: 420px; margin-bottom: 44px; line-height: 1.8; font-weight: 400;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--teal); color: #fff; text-decoration: none;
+      padding: 16px 36px; font-size: 0.8rem; letter-spacing: 0.1em;
+      text-transform: uppercase; transition: background 0.3s, transform 0.2s;
+      font-weight: 500;
+    }
+    .hero-cta:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+    .hero-visual { animation: fadeUp 0.9s 0.3s both; display: flex; justify-content: center; }
+    .hero-card {
+      background: #D6E2DE;
+      border: 1px solid var(--line);
+      padding: 48px 44px; max-width: 340px; width: 100%; position: relative;
+    }
+    .hero-card::after {
+      content: ''; position: absolute; bottom: -10px; right: -10px;
+      width: 100%; height: 100%; border: 1px solid var(--line); z-index: -1;
+    }
+    .hero-card-label {
+      font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-light); margin-bottom: 28px; font-weight: 500;
+    }
+    .hero-stat { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+    .hero-stat:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .hero-stat-number {
+      font-family: var(--serif); font-size: 2.8rem;
+      font-weight: 500; color: var(--teal); line-height: 1;
+    }
+    .hero-stat-label { font-size: 0.82rem; color: var(--ink-light); margin-top: 4px; font-weight: 400; }
+
+    /* SECCIONES */
+    section { padding: 100px 60px; }
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 14px; font-weight: 500;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+      font-weight: 300; line-height: 1.15; margin-bottom: 14px; color: var(--ink);
+    }
+    .section-title em { font-style: italic; color: var(--teal); }
+    .divider { width: 48px; height: 2px; background: var(--green); margin: 22px 0 48px; }
+
+    /* SERVICIOS */
+    #servicios { background: #D6E2DE; }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
+    }
+    .service-card {
+      background: #E8EEEC; padding: 44px 36px;
+      border-top: 2px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .service-card:hover { border-color: var(--teal); transform: translateY(-4px); }
+    .service-icon { width: 38px; height: 38px; margin-bottom: 26px; color: var(--teal); }
+    .service-name {
+      font-family: var(--serif); font-size: 1.4rem;
+      font-weight: 400; margin-bottom: 12px; color: var(--ink);
+    }
+    .service-desc { font-size: 0.88rem; color: var(--ink-light); line-height: 1.75; }
+
+    /* SOBRE NOSOTROS */
+    #sobre-mi {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start; background: #E8EEEC;
+    }
+    .about-body {
+      font-size: 0.96rem; color: var(--ink-light);
+      line-height: 1.9; margin-bottom: 22px; font-weight: 400;
+    }
+    .about-values { display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
+    .value-item { display: flex; align-items: flex-start; gap: 14px; }
+    .value-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--teal); margin-top: 8px; flex-shrink: 0;
+    }
+    .value-text { font-size: 0.9rem; color: var(--ink-light); }
+    .value-text strong { color: var(--ink); font-weight: 500; }
+
+    .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .team-card {
+      background: #D6E2DE;
+      border: 1px solid var(--line);
+      padding: 28px 24px; position: relative;
+    }
+    .team-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%; background: var(--teal);
+    }
+    .team-initial {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--teal); color: #fff;
+      font-family: var(--serif); font-size: 1.3rem;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px; font-weight: 400;
+    }
+    .team-name {
+      font-family: var(--serif); font-size: 1.15rem;
+      font-weight: 400; color: var(--ink); margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: 0.72rem; color: var(--green);
+      letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+    }
+
+    /* CONTACTO */
+    #contacto {
+      background: var(--teal); color: #fff;
+      text-align: center; padding: 100px 60px;
+    }
+    #contacto .section-label { color: #7ECFA0; }
+    #contacto .section-title { color: #fff; margin: 0 auto 14px; }
+    #contacto .section-title em { color: #A8E6C0; }
+    #contacto .divider { background: #7ECFA0; margin: 22px auto 48px; }
+    .contact-subtitle {
+      font-size: 1rem; color: rgba(255,255,255,0.75);
+      max-width: 420px; margin: 0 auto 52px; font-weight: 400;
+    }
+    .contact-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-wsp {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: #25D366; color: #fff; text-decoration: none;
+      padding: 17px 38px; font-size: 0.82rem; letter-spacing: 0.08em;
+      text-transform: uppercase; font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-wsp:hover { background: #1dad54; transform: translateY(-2px); }
+    .btn-email {
+      display: inline-flex; align-items: center; gap: 12px;
+      border: 2px solid rgba(255,255,255,0.5); color: #fff;
+      text-decoration: none; padding: 17px 38px; font-size: 0.82rem;
+      letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400;
+      transition: border-color 0.3s, background 0.3s, transform 0.2s;
+    }
+    .btn-email:hover {
+      border-color: #fff; background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+    .contact-info {
+      margin-top: 56px; padding-top: 44px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      display: flex; justify-content: center; gap: 56px; flex-wrap: wrap;
+    }
+    .contact-info-item { text-align: center; }
+    .contact-info-label {
+      font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55); margin-bottom: 6px; font-weight: 500;
+    }
+    .contact-info-value {
+      font-family: var(--serif); font-size: 1.1rem; color: #fff;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #0F3540; padding: 26px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .footer-logo {
+      font-family: var(--sans); font-weight: 500; font-size: 1rem;
+      letter-spacing: 0.12em; color: rgba(255,255,255,0.6); text-transform: uppercase;
+    }
+    footer p { font-size: 0.72rem; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; }
+
+    /* FAQ */
+    #faq { background: var(--surface); }
+    .faq-list { max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+    }
+    .faq-item:first-child { border-top: 1px solid var(--line); }
+    .faq-question {
+      display: flex; justify-content: space-between; align-items: center;
+      width: 100%; background: none; border: none; cursor: pointer;
+      padding: 22px 0; text-align: left;
+      font-family: var(--sans); font-size: 0.95rem; font-weight: 500;
+      color: var(--ink); gap: 16px;
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--teal); }
+    .faq-icon {
+      width: 22px; height: 22px; flex-shrink: 0;
+      border: 1.5px solid var(--teal); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal); font-size: 1rem; transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-answer p {
+      font-size: 0.9rem; color: var(--ink-light);
+      line-height: 1.8; padding-bottom: 22px;
+    }
+
+    /* ANIMACIONES */
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-14px);} to { opacity:1; transform:translateY(0);} }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0);} }
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 20px; }
+      .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+      .hero-visual { display: none; }
+      section { padding: 72px 24px; }
+      .services-grid { grid-template-columns: 1fr; gap: 3px; }
+      #sobre-mi { grid-template-columns: 1fr; gap: 48px; padding: 72px 24px; }
+      #contacto { padding: 72px 24px; }
+      .contact-info { gap: 28px; }
+      footer { padding: 22px 24px; }
+      .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg viewBox="0 0 220 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABNCAYAAAAxWePoAAAeJElEQVR42u18aZgV1bX2u9beVef0JCDYCGIQjRoBQQUHnA5J9MYMzp4OCqKgF5IYTTTX3Hwm8XBu8uW5XxKjJoqRa5wYFI7zmEQTOc5GEY3SGsUBh6gNKFN3n1O191r3R9VpultUpiTmi/t56qGpU1V717vXXnutd61VwCftk/ZJ+6R90j5pn7R/TKOPzUgKBc63tlJbWxuVAaC5WVEariikvxcB5FsJbW0EADkA48ePl2KxqAD0X3Py8nmDXM5u8UzXnlMo8P//ElgoMBYuZJTLrnaKCfj8ad8c9s6a1bsJ7Ejn/dBKFPU3TAOc81ZUEQYBVLGGDbXV2eBtBi3pW1/3wqk7bff8lGKx0q0HRj5PKJXk7yGZ9HcFrrWVUCp5ALj88suDS35//6FVoSNj5w/1hOFCnFHirvdW1R5DJaKuEZMCJALDeDVkWmyB3w7q03TvH6+67GXtLplpf//MABLyea69yCGTTh/2XjU6rT1yJ8SquysbiHjACwCNFVp7YSIlAoFAlIJKAoWCAFWwAhaGmdmCARhxnaE1f2wKw1lPXnfEnUQtvnf//1wAdpOA3KTTPv3XtZ3nRKIne2MavfeAeA/AqSoTcwBjwMQgpICpgBLgkoMYIIIAgAqSZ4gHwamCiBCyDWAABNCnGgL+2ZLS7HmyfixbfVn/7QDM5SzKZXf22WfX3b1sxbmd3p8bEzdqHANARFBS4oCNAROBxHew0nOZwD5rIH9h4tcDlhXV2K+zAJhMHSwPiIHmKI6HKmi4Ex0pxDsIG4g4qHOSTAgMWWsMEwLVct+MPX/xgmvv71IlxaJ8nAFMxQWy/4RTD2/riC6MiUf4OAJIYwURs7HGWpD3KzLG/qFffd2tfYOGB++9+hevyyZ08vVCofHZZe/s/W77ui+srbh/E+Z9vQLqXaIOlJisNVaBhjC47HMDG747c+bMdbXJ/fgBmM6uIcJnjp34X2ud/jBWAbxLBmustcaCffxMQ2gv3327gaWbf31B2/skN7XzmpubtVTTBgDaUhuwDADl8QKslyQmwtgTTvncapFpHVF8nGcOJI6ECB5KhsMsB9BnB2Ux+ZHrZy/eWiDS1gbvqKlTm1pXds6ukD3aRRVJVBYZDkIKxS9ryoQ/OuOwA6+dPn16XNOTeQCl4cN1A0ur9/h66y/K5/NcamujGhgE4IBJU0e+21E9v91r3osC4p2mExhC2xsNn9p689wbtgaItDU3i/2PnDCwjfjOiHmMxJGDKsEYY8igT8Zesk9z44zZl166cr2OXOgTg6Tbbt3WRokXskGF33VNvrlZS72vyecNSgBQ8gRgVP6UL6+J3c9j4s9IFHkFoETGGoN+oTnn2dK1F+oWgkhbS/IOmzB18EsdnfdWQHvAO0dEgDE2UH2zj7Wn/fmm2b9LcMvZcvcB97IP11vDwIUXX5x5o1IJpa1Nfr7//hVuafG6ocnrLb3dnjl16tSmB1dVLq6omRJHkUChQkphNstNkO+13jjn/22JJG4hgAUGipo75ZQ+r70XLYzIjBZXdQCBg9BmoQ8NzrgTH5g///V0kL5LYnoBN23atPrHVlf3q8ZygCjGRuKGqup2TFynAq+q7Uy00lizLLS8uJGDhw4a3PTEhRde2Nk1lgLQA8h0ZRCAPfOTzlpdlYsj8YCqKJFYG9pGuDOfv+W6SzYXRNqi5Z/P833Dh9PURc//rmqCz6mLHABwGNqs+Dv3CV2+VCp1vk/qutmHe7VMGt0eYVrVuS8pm52EDaAKUQ+oAAoQOBFJMMCJLWi8h1X/ahiGd/TL0lWPzb36Sd2wvUfI5QzKZbfvhMktb3fE1zrRkFQUYDXWmCb1R7fedv1tm+O5bDaANVB2P2biJe0wZ/ioEiuDTJCxDervnPfF3LFjp0+P8/m8KdUGlSx3BaBjWyaNfK/iz6t6bRFrjHoH9SLEJKmvkXogRCAFFAqQKkFVCQQ1xExkDNh5rQvtjdtlM//34XlXPLVBe2/MtACLZsXDj8wfsZbs7U6ESaFgIgtqH1hvxz4+f/YLm2on0pZsGqOOOem498A3ujhyBCK11mTEP3zKPrt/vlgsVlEoUNdg0nsUoBEnTDp/beS/54mziWGtThMZYyLq5f+motTNL9Yu704FUFFlSzaEhY+bMvbC6Qf3Of9b3/pVtcfkARgzZlqwaNGseNSxkyasUlwXO+cJqjChzcI/efJeu44rtrb6TfFYaLP0XgE44rXX+i9p61gSE/ozVJStCUFv7JgJxzxYump5j5lMwTvk2ImDXvfumpjDwyWuQkU9EUwNtBQoAZGogoiJAZCmP5Ai9e2IAE1/UxAxIOSVYUwmg6z6Pw2qC058cN5VL/cGsUsSj5/4wzXC/+XjyEEZJszYRnI/ef6mOd/flKVsNl36mhkzZwrtNPySqgkOgo89YMgyY0CAox674drn8vm8aZ05swd4o488fkSb0j0R2bESVx0REYE4pQ0AhQeBYC2zCdgaZiaQIcAQgZmJbcBkAwYRqwqRwhOIQERKxESk4pxzZD7V4eSru43a+6F7SvNez+VydtmyZcl43lqkyOXsirtvX9j8mZHjPIW7QbyIFxWiA0cffNANy+Zcsxz5vEFr60dKIW/O0h2dn7xfp9dT1cWeiGGCjGkwuPDJG+c+gFzO9tB5pZLf9/jJI95Ve28E3lmT5W67Sb8ABAoCY42ljOKJbQP7y0GNjScNacrsN3zQdiN2ax44fEhT437bGDq+EfrTUPwjlgw4CI0m4iugVDkCgTjnKl62f7vqfj+65ZSDyuWyQz5vujTA+PGiAO0QBKdace+CmAGRmDh4Y8Xq/94UwoE21eajYlF2PmrCvRUyn1cfx0qBrWO8fsRenx4xE+jAeoqdAchhU6cOfml55+MV0GB452tSn/ItHsYYA9KQdE5ztv7yx0tXPuRVP3LW9z3p9DHvdlS+1un9ZGETahx7IhgBJfuOwMOwyRCtGrRNeMgjc658todaSc2Wkcec9LXVZC5zceRUiQJreHB9eOhj11314MYsZdpU6dv7+JPHroj9n7z3CiXlIDD9ArQ8c8PsUrcOCfk8az6PXebc9IcKTE5d5EBkk82AoATHQWhD7xf3Dc03n7pxzsPdzY586gcXhg/XIgC0tiZjTdy2Lnty7PEn771KcElFcaCPIw+CUTA4mUYPY0yG9cUv7tBnn5kzZ65bP3epGfaNb9DpF/3P4k7lkXAuosCG9aS/W3rL3CN0I3bkTQZwl6NOnFthc5LEcQQThHUki1+9bd4+cv77N42Rx00qrBaa4aqVWAlBV4dEjsPQ9g3MDSfssdMpxWKxA7mcxfjxstEmRLfQwH2Fgp329NKLKsRnuCjyRDBdr6YSIwiDesLd5x5xyNHTp//Vd5EQqRTuefypR6/y/hYXOQ8CW8N+cB2Pemz+7Oc+yqwxG73zts6UI04/c8jb7e2Xxt5bJcDagPtl7H+89exTzwAwWLZMaobsQZNPH9HWHs2JvUPyQukbEZwJMraJdNYLN82efN/CcpzP503rXXd5lMsbT3aWy1rr75qZM+Xd55+5a8eRo0xMZryIOAIYqh5srDEGGZGX4uq6W57500+rXWNZtkyAAr/T0veFX77ZdrwYuz2gEYIw9KKdK5/78z1d77VFm0huIQPAqytXHq0mqCeoAxkbiHvz6M+MuwVAbVl1mWpvvbf2J54pTG2QZM8FeRNkbVb1jhdunjvda96gUODSltDttXtzObvkhjnnN0IvtUFoVRFREBqr2taHcdoLt8774txf/WrN+1id3EKmYlEa68LLjTFQBXkXoxrH+TPPPDOTune0ZQCOHy8EIPJ6lIooQGJsgKwxC4rF6R3I5QwArS3dvY6dNDpW+orGsYBSKVeIsuFQ5c39dhk4RQAqFDZIYW1OU5TLHrmcbb15zlnWRY/YTDasI8wf2qBjn71x9pW6/l21lyR7AOhvs9fDVdcQUQgnXsgOfeDtdQckGinPWwIgoViUL5309X5OdF/xSqpkWb021GdvAED55uYeg2oXf5ZYy0jDFwBBwWqMoXrIt677xS9W5HI5U9yK1HrNPCEi6V/XMK2/1VOW3jxnwgPz57+eS0ha+cD78nlz/3WzVmSYHiDLCXNuLCouOgwASimRu3kApugv61w7Vo3tp1DHxhgj/vXv7jL4CQA1Xo5QKvlJkyY1VJ3/incO0NRQVngE1oTin3jututuRD5vyluJUu/RkgmhJxZc+exTC669NmGLlD6yr7Y2UoAs811ESbTGiUOkenBCgZe3QAem6FedG6tMANQRGdQF4VNfLRaj1EDVmpg/F4cHqQ2aISIgMJSgIBhmNGbDS0WB3IfM6FaRxEKBE6krajfC9kNVFABtCPAouVihGqh4xF5HTJl6blMqvbR5AKbL0xPv5TU1oJhgGA9qN4BrYr620jlemJPoo6YhcGZj4njVLs2NtycTWt6UTYM+8CiAN3i+WOzeR+38hq6tSa4CwB47bv8XVm1jNgwRAWjAko53h6Vm02YCWCoJAfAqO6kooMSkAmvQWgv+dN9oYtExEAXApMRQImFjkAnMn2699NKVybLaJFdJLUhNetj0MCDlIsRu4LwB9TifnFt/rUmkUnvFWmjuBRe0W2NeITIgsIOx1B5Vd04264UbxMpuxOzr+YVC9qpFfxmUJA2IZRX0zTS9mQTHxgvKZaBYFFmwwOw0+6ZhKgl5BwBKUGKCJVmsACG3kFHGR28eBTAVIUf/8uyfrUblIF9JXDUwJZpBPGLvojAIQi8KwwZQqaWDKBHIA+A0jUFUvWE2UPJBXcYMcNkfX/ftn92VX7DAlFpaPHI5o+WyY+BVYjpAvYoSQQ0P/bBhblRm1CNvvFEvkEaAkTIhlb71urI30C2PPNJHFdsJfOKsKaBpOotlsxSA5mphyY9qrckErKis2X+5rY5TF4OIutHMyYM1qnT5Zt1dq/dHowjqFRBFJqyDFYwDcFfbkiU9liYJ/gpDXaozjvwAfMiY7UfpY4DgYltHMFlN/2+ZK0P69OkAAMyYoane0TUdso0SGhJ/N5FBUrCqwnt9AwDKvUyej1zCxO2oek8OHhBD3UmcGpAJxdoDNuqh87X7tU6qzorxfZLfFvboz5O8lzwv7YVkmy2gs5LHrFu7jgSSeBPEENVqp/dRb3d65fLlLJJkBGnKxtcyW9his7wNFeXEGFeTuJ7a7e/e59Hr/PuvVcAIklBId8mq6fKGujrtymVSIHZCWwBgMnM2kxFol3oBRLlaqaS+7fpZ79OnDwynEqG1u1lBhCDINAGbZsJQosxUFF5Uux2+26E9DpXkEPVeIbKhZ3Ii2Ruc0CiKtCbICiAwzJuvA1Px2X27gfEbHa/ETlCnCigjE61DprcZsC1nVwFYC6J+0FQBAqogVKqueXMkMGNMQ32mzqiJDRQgw1BJzbseq5a6fB5CYkOJCKJKlOQV1iaUFEwEJn6vJnnlbpLoReuV1j8xMDbafADTWMWntg1X6yt4j4i2UREV5YZ3NOoLYDkKMwjFRCEt+MK41UPn3LQCMP20RvxRElATlT2xsRsIACyACAG7bTvk3ArLYHGxauzImMS19t4DpkYmeRgYeA94eIQ2MFDxjnDIUyte+XZUjTxhPcVFYDDRG6n91WNUDOyYqO9kk2LDK7sDvam7sAKgGTNmxLOPmbjKKQ1Vgocxdk17NBjAi/nWViqlHCC1tPhhR5241BHvqmBNNhElEUEVcgATQTbWiE433F9P+cGjm+uSHHnxWQPUMJRUOTUHVEEWhL7Zhpd7kgrjhVBG7P0QNQZKRKQKeH1ty8yYfJ6JyO905IkvkjGjId4Js62QjgBQ7nK0038DaxZHQkfUAAARq3fq2IzKTZm++31X/nqTYq+FQoEXAtw8YoT2Njk+qC1HKy8ZscB/dtm/T3ASgdJk1yS0B8NOo10ah7Sm8idlgICizC8UwnMXv/BpFYUqLEHRmKl7BWmm2OYBmAKTCcxzsabcgAIiuh8BMzV9cI2CbwjMHytVOc+rcqoCCCCnxtq2VevyAH6MhQvNh7AjvfiBomzstTXAizNKfta9pR3XvRIdKFEMJsO1tGsYpqwNlv1gwrRlPzxxevL8NOB/0dLXhwlosKpTEBl4v7a5PvsiAJQWLBAQbborV6OqssY8xqqAwqrziCJ3oCxY0BV0SRkZjBgy4FF49zYxMzTxhwlg75y2e0z/znd+1pA6738TQmEhFjIIelvrA1M7jc8QyCVZDgqFShBY3SZT9wciciikuYiJm0btkR+nbCxEY2IGq7x0x29++U4a4dfN8oVLw4crAGzfL/MkxVEHiCzEq1MdNvbmO3ftik8AilzOzrnggnYmvYGNRS25hVQZXiRmM+SuV5/+LopFGTNmmt3a4BUKBS4Xy3LZ7VfvsLxz9bejSkUJZGrqXFU4C0vDGgfdBAD5EWdoN+Ne18XR4SIKAoTZaGDMI5qw3Wbz6axkCfHvZ816yxp+nA2rkkRira16+moy7amjnUgW+jdmZxlx0vV8BQjKLor92li/u1/LlNGLFs2KN7bIZmPbHW+9ZQxBbl762EVrOOpD0o2GUhIKDDXAPHfJlPPKAKjUkmbxl0r+qKlTm6LYH67iISBrmKixLvPbHoTJ5sdEcqwAstbczmyIlMh7h7WdlZN0wQLTFQ8pFgX5vHly3tXPhKS3cmCZVD1IAAiReopB2eVRPP/sQmFblMsuvz7gvUVteD4fLpo1Kz7sP8/42jvxuhOkGnki6nq2qEp9XT3tvN2QC4koyhUKBt2ka+mK6hfUBttBnSPDll28YtTApvs/in7b6JgIAAzs23SD8b4TRAG8emfsbqNuuP2zXfEQABg+XBWg7eqbzgugTik1BAGAmcl7XyHe/ZanX75t4sQztymVSj6VRNrcZYtczraWStG4yaef0Nq66pIVrRVviZmUQEogkJBl08fbl64+tTgPhQKXZ8zwXTQcARXIGZJ4Pp6MUUu47ZqLL15VI4y3DMBUsu67cuayAP5uNoaI1AkIHZH/Hr3/Wn7kulnP17H+2IaBUcCtLzGCkWrkOxUHPdz+3sJDT/76HmnkS5HLWajSRiLHyOVssVgUKpfdnsdPOuP1Ve3zI/Ecv0W89oW0sIkIIipNmTrave/AbxBRe35Ea7Ip5PMGxaKOPGbiAbFivLpYIAgslPpnw6uBJLl9awbWZdSxkz77rtc/OOc8SMlYy9taOvSZG+c+0DszYQGA/6yacpXMQeqcU+IunacKT8aYkHTtNoH9/vkjdrq8pViMuuLQaSi1ZgX0COx0i3F8+azvjHzxzbdndHg63kWRgghgIokV4XaChk9LHDbUBUOp72V3fueSb5ywIG9KLWkoNB3vp76cv9uZ4AhxccQ2DOogDy+9dd4hRDOoeyXAVsuNGXbUhAcqZA4WF0ewYZgReezV23Y9kFpa1xf5pbbVYVOnDlq6ovOxKmgIvHglMl0LQkWUmW0QwIr/cwPjimHNjTfddfnlb34Y56Va4DEtr+69zrlTq4p/jxQZJLkxrLUKMWK4yMd1O9pg590a77vv3F8fTi0twIKSgKC1tLcxJ55yzDsd7mYXxx4KBJmM6ZexR/55/lV3vC81bosBTGdsn/ykzy2P5A9x7DyIYDMZs63BuX8uXfvzHum8qcex7/GTR6wQX6469Ncka8B2S5pUVQisMdYwIG6NBR7LMj+tIq1hYN+tyxis7WjPMGeHesXwinNjY8VINRbiqiCFB5EBknovgKCKmMJMkJXo/pP3+reji8UpqwuFAqWGOaFQoPxbbzX96a3Vz0bgHSDeqQmCOvGPvnz77gfRDGBjvKVNV9z5vKFSyQ87asItVbZHSxw5haUw4Hi35j773Tvr0md6zFwK+qEnnbrnG+3x7VUyQzWOHACj2r3/1IEiNjAB2HAa+VEwFD6JZkEAqHiodyCFY6gBJYmWaZ6hACwUhraB9Xe7V9897o477ujo4T6OGRPQokXxbsdNvGatp8nqqk5hyBrm7bO0/xML5j6+sUmWm16gnO6ygzLBWez9WpBhItFIKfvK8jVzC4VCtlQqaRo8SlIv8nlz/7yrn9ltu7qDs+R+b8LQKhGB1HfRUkQMqIF6pTj2Uq06H0XORZGPqpH3UdX7qNMhqjhyCcuZ5BkydVXHAk7Zsg0Duw3JL18YOexLd9xxR0ehG3hjpk0LsGhRPDp/8ikdypPFxU6VwWFomgK+bFPAA7YwR3qPo086bR0HV7hq1SkRKAhsk9EbX7ppzgn+0EN7FtKk9zCATx990nc7BT9UYxq9iwBVBwVrkrabZOWndFJXeKCmOAkpydxl4YkSCYgtByECccu2zfI5T82ffVMyNdrF+tbUy55HthzwHpn7nGhgVNVzYDPwL33+M0P2vrK+vh2b8BmBzSuRT22352+d95vAVeebMGNZAYkj167m+J2PmXgRymWHfAt3mSWlkkehwALQC7fO++nALI2tNzTPEjsOQgtmToJ45ADyIJWEPIGmpdcKQKDkAXUAnKpADTMHgQ0Nr+hr8JP9BjTvs3j+7Ju0y0BPwBszZkxQLpfdQZOmjF6lfJsTZFkUAkMBw/WvCydd+bOfrU3zEP9GGaq97y0UaNJL6+oeWfv2w53Ko9Q7pwQYG9gGyK+W3jLnrG61ur63BAPA/hMmj1pVxSmR+GNilZ2VDVQ1YZ1FUxtc15uRbECUED0kHpbweEMYlobWN8y+65qZb2MD/Y0ZMyZYtGhRfMDEU/d5e110d8VrM3nvlUmDMGubKJ7eetO8WZtTbLNljEiqW3JfPWWn16ruoYrQYPWxV2K1QcbWkVw/cc9hpyUJlAWLcvEDS7zOPvvsuvvfWDWmXdxno9iPFsKuKhgAaJOqkqhUrDGdzPTXMLAvkchj/Rq3uf/Ra2c+JdrTVkX3aqhiEQBk75ZJR66s+rmR16YaeDaTtX1I/nvJjXP+z/uKgf4uAHab7X0nTB7R1unuiZQGqRenBHAQ2kaDJwc3BKeVr7niKdSqK7tL4wY+QgEkmfnfPuechneAhtWrVlGnMZWJ48ZVT5sypSLv99V7lpF1q05iAnY/dtIP1jr/I+cFpJJMcCZrm8hf9PyNc87Wf1ytXE8Q9z/m5D3axN9VJbOT+NgBgLK1GWilX332vKeuu+IiIkp26Hwrva8kq2e1pv/AMdeu650S3GsyDp582qi/ruq4uEo83sWRskKUiINMhuogP37x5rk/1C38FMBWIzVrtt/n8pN3eM1JqRM8TqpVnxCRZE0mhBX/UP9sprj4+t/cI92l58PKW7Wm/wgbTDpQJbS0rDeZAOROPHHA21VzVkfsznWgrDrnAAWMtQEb6ZsJznmmdPXFW+M7CluXFU4lsVAoZK97eunFnYppXjxExCkIbAJrCMgw/X6bbHjJ/3zn678dO3Zs3OP+Wi1wSuTWQqZd2VGt679e1GvZ4vDTvznszdVrTlvTWZkiNhgssQOpxKrEHAYmUH29f4ZPfbI0548fv4r1XhsLAIw69sQJa5QvjEDbS1RVAsUKsggCtgAC6HMh0Q0D+jTe9f199lj8pW99q7opXTGAr5xx7uCX3nrzkFhNvtO5L4i1jeJiQCRWgMhYa4iQhS7Yc2Djt2+eNeutj+83E3rrqVLJH3v6mUOWrFz1o04XnyrGwsexAhQDZMBk2FgY8WDoS9nQLDKCx6zh1tDIO031wbscx+vWrF2L/gN2rFvdvqax4rW56v0wZbNX5PzYyMloZW4SAOIcAIoAJWIK2AQIVJ7vE5rzni5de/OGTJyPK4Dvs/f2zp88bk0k/xEDxwkZeOcg6mMiCAQBmJmMAScxlFrlYaSiHYCCmLNQZJK0AoaCIOKhyfcsYjAJlEI2ltgwjHcvN2bsZSf0y84szprVkYxlgWxUxurHBsDuSj4F8uBJ0/Zva++cWvH+aDF2oKpCvIeKE4DixIomVmYDQpKNpev5LwA+LXNVAIZAAawFGwOKY4TWPtqYsVccPmTb6y+44IL2v4XU/X0B7K4b1wepcOK0aQOeX1U9rCI4qhK5A2PxQ9UGUCJAkpprFekCL8l5TfzjhGlmkApYpcOwWVxn+Z4Ga+9cdP2VT8gH24f/xAB+gAcCABdccEHdgsef3rVDaR/vMaLq3TAX+2Zm3lZUQoEiYCNe/GpjzHuW7WuBoRfrM5ln+jU1Lrn3sh4f7Knp37/L19v+kY3y+bzBB0TlCIBhgqpyehB9mCD8y3w/8EOIidzChbz+65Ul3UBKBwF5Ri6xA7vsxa1bsPNPCeDGjvFf8lOfn7RP2iftb9b+F2dmzc27IiiaAAAAAElFTkSuQmCC" x="0" y="-2" width="58" height="58"/>
+      <text x="66" y="22" font-family="DM Sans, sans-serif" font-weight="500" font-size="16" fill="#1B5C6B" letter-spacing="2">GRUPO CONTA</text>
+      <text x="67" y="38" font-family="DM Sans, sans-serif" font-weight="300" font-size="11" fill="#476057" letter-spacing="2">ESTUDIO CONTABLE</text>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#sobre-mi">El estudio</a></li>
+    <li><a href="#faq">Preguntas</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Grupo Conta · La Plata, Buenos Aires</p>
+    <h1 class="hero-title">Contabilidad<br>con <em>claridad</em><br>y precisión.</h1>
+    <p class="hero-subtitle">Acompañamos a personas y empresas en su gestión contable, impositiva y financiera — con atención personalizada y soluciones concretas.</p>
+    <a href="#contacto" class="hero-cta">
+      Consultá ahora
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-label">Por qué elegirnos</div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">100%</div>
+        <div class="hero-stat-label">atención personalizada</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">Pymes</div>
+        <div class="hero-stat-label">y monotributistas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">1ª</div>
+        <div class="hero-stat-label">consulta sin cargo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <p class="section-label reveal">Lo que hacemos</p>
+  <h2 class="section-title reveal">Nuestros <em>servicios</em></h2>
+  <div class="divider reveal"></div>
+  <div class="services-grid">
+
+    <div class="service-card reveal">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="6" y="4" width="28" height="32" rx="2"/>
+        <path d="M13 14h14M13 20h14M13 26h8"/>
+      </svg>
+      <h3 class="service-name">Liquidación impositiva</h3>
+      <p class="service-desc">IVA, Ganancias, Bienes Personales, Ingresos Brutos. Cumplimiento fiscal puntual y asesoramiento para optimizar tu carga tributaria.</p>
+    </div>
+
+    <div class="service-card reveal">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="20" cy="20" r="14"/>
+        <path d="M20 12v8l5 5"/>
+      </svg>
+      <h3 class="service-name">Contabilidad general</h3>
+      <p class="service-desc">Registración contable, estados financieros, balances y reportes periódicos para que siempre tengas visibilidad de tu situación.</p>
+    </div>
+
+    <div class="service-card reveal">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 32l8-10 6 6 10-14"/>
+        <circle cx="32" cy="14" r="2" fill="currentColor" stroke="none"/>
+      </svg>
+      <h3 class="service-name">Monotributo & Arca</h3>
+      <p class="service-desc">Alta, recategorización y bajas en Arca. Gestión de trámites, vencimientos y habilitaciones para monotributistas y autónomos.</p>
+    </div>
+
+    <div class="service-card reveal">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="6" y="14" width="28" height="20" rx="2"/>
+        <path d="M14 14v-4a6 6 0 0112 0v4"/>
+      </svg>
+      <h3 class="service-name">Sueldos y RRHH</h3>
+      <p class="service-desc">Liquidación de haberes, cargas sociales, Arca y ANSES. Altas y bajas de empleados, recibos de sueldo y asesoramiento laboral.</p>
+    </div>
+
+    <div class="service-card reveal">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20 6l3 9h9l-7.5 5.5 3 9L20 24l-7.5 5.5 3-9L8 15h9z"/>
+      </svg>
+      <h3 class="service-name">Asesoramiento fiscal</h3>
+      <p class="service-desc">Planificación tributaria, consultas puntuales y acompañamiento en decisiones estratégicas con impacto impositivo o contable.</p>
+    </div>
+
+    <div class="service-card reveal">
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M10 20h6l4-10 4 20 4-10h2"/>
+      </svg>
+      <h3 class="service-name">Pymes & empresas</h3>
+      <p class="service-desc">Servicio integral para pequeñas y medianas empresas: contabilidad, impuestos, nómina y reporting mensual en un solo lugar.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section id="sobre-mi">
+  <div class="about-text">
+    <p class="section-label reveal">Quiénes somos</p>
+    <h2 class="section-title reveal">Un equipo contable <em>de confianza</em></h2>
+    <div class="divider reveal"></div>
+    <p class="about-body reveal">Somos un equipo de contadores públicos especializados en acompañar a personas, profesionales independientes y pymes en su gestión contable e impositiva.</p>
+    <p class="about-body reveal">Nuestro enfoque es simple: estar disponibles, ser claros y anticiparnos a los problemas. No hay consulta pequeña — cada cliente merece una respuesta concreta y a tiempo.</p>
+    <div class="about-values reveal">
+      <div class="value-item">
+        <div class="value-dot"></div>
+        <p class="value-text"><strong>Transparencia total</strong> — Siempre sabés qué se está haciendo y por qué.</p>
+      </div>
+      <div class="value-item">
+        <div class="value-dot"></div>
+        <p class="value-text"><strong>Respuesta rápida</strong> — Consultas respondidas en el día, sin vueltas.</p>
+      </div>
+      <div class="value-item">
+        <div class="value-dot"></div>
+        <p class="value-text"><strong>Trabajo en equipo</strong> — Cada consulta tiene el respaldo de todo el equipo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-initial">CM</div>
+        <p class="team-name">Christian Alejandro Molina</p>
+        <p class="team-role">Contador Público</p>
+      </div>
+      <div class="team-card">
+        <div class="team-initial">AG</div>
+        <p class="team-name">Adrián Gabriel García</p>
+        <p class="team-role">Contador Público</p>
+      </div>
+      <div class="team-card">
+        <div class="team-initial">SC</div>
+        <p class="team-name">Santiago Calcaterra</p>
+        <p class="team-role">Contador Público</p>
+      </div>
+      <div class="team-card">
+        <div class="team-initial">GR</div>
+        <p class="team-name">Gonzalo Ezequiel Ramos</p>
+        <p class="team-role">Contador Público</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="section-label reveal">Dudas frecuentes</p>
+  <h2 class="section-title reveal">Preguntas <em>frecuentes</em></h2>
+  <div class="divider reveal"></div>
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Qué diferencia hay entre un contador y un estudio contable?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Un contador trabaja de forma independiente, mientras que un estudio contable cuenta con un equipo de profesionales especializados en distintas áreas. Esto permite ofrecer un servicio más completo, con respaldo técnico de varios profesionales ante cada situación.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cómo saber si necesito un contador o un estudio contable?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Si solo necesitás ayuda ocasional con impuestos básicos, un contador puede ser suficiente. Si tenés una empresa, emprendimiento o ingresos complejos, un estudio contable te brindará soluciones integrales en contabilidad, impuestos, planificación financiera y asesoramiento estratégico.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuáles son las sanciones por no cumplir con mis obligaciones fiscales?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Las sanciones pueden incluir multas económicas, intereses por mora e incluso la inhabilitación para operar. Contar con un estudio contable te ayuda a evitar estos problemas y a mantener tu actividad en regla con Arca, ARBA y los organismos provinciales.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Puedo deducir gastos con la ayuda de un estudio contable?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Sí. Analizamos tu situación para identificar todas las deducciones y beneficios fiscales disponibles, ayudándote a reducir la carga impositiva dentro del marco legal vigente.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cómo afecta la contabilidad a la obtención de un crédito bancario?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Las entidades financieras evalúan la contabilidad de un negocio para determinar su solvencia. Un estudio contable te ayuda a presentar balances claros y ordenados, aumentando tus posibilidades de acceder a financiamiento con mejores condiciones.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Puedo externalizar completamente la contabilidad de mi empresa?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Sí, muchas empresas delegan su contabilidad a un estudio para reducir costos, evitar errores y optimizar la gestión financiera. Nos ocupamos de todo el proceso para que puedas enfocarte en hacer crecer tu negocio.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuándo me conviene pasar de monotributo a responsable inscripto?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Conviene evaluar el cambio cuando te acercás a los límites del monotributo, cuando tus clientes necesitan factura A, o cuando tu estructura de costos te permite aprovechar el crédito fiscal de IVA. Lo importante es planificarlo antes de que Arca te excluya de oficio, ya que una exclusión voluntaria tiene beneficios que la automática no.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Qué pasa si Arca me excluye del monotributo?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Si Arca te excluye, pasás automáticamente a responsable inscripto y tenés que liquidar IVA y Ganancias desde la fecha de exclusión, perdiendo los beneficios de la transición voluntaria. Si sentís que estás cerca del límite o recibiste una notificación, consultanos cuanto antes.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Necesito un contador si recién empiezo mi actividad?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Si vas a tener actividad de forma habitual, sí. Arrancar con la inscripción bien hecha evita problemas futuros, retenciones innecesarias y costos de regularización. La primera consulta en Grupo Conta es sin cargo.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cómo se mantienen actualizados los estudios contables con las normativas?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Un estudio contable se capacita constantemente y monitorea los cambios en la legislación fiscal, laboral y contable. En Grupo Conta seguimos de cerca las actualizaciones de Arca, ARBA, CPBA y CPCECABA para aplicar siempre las normativas vigentes.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Qué incluye el servicio mensual de Grupo Conta?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Cubre todas tus obligaciones: presentación de declaraciones juradas, liquidación de IVA, Ganancias, Ingresos Brutos, sueldos y cargas sociales según corresponda. Incluye también consultas y asesoramiento ante cualquier duda que surja en el mes.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Atienden a clientes de toda la provincia de Buenos Aires?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Sí. Si bien estamos ubicados en La Plata, atendemos clientes de toda la provincia y del país. Muchas gestiones se resuelven de forma remota por WhatsApp, email o videollamada, y para reuniones presenciales coordinamos en nuestras oficinas.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Qué pasa si tengo un problema urgente o una inspección?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Nos contactás y te respondemos. Si te llegó una notificación de Arca, te bloquearon una cuenta o tenés cualquier urgencia fiscal, estamos disponibles para ayudarte. El asesoramiento ante situaciones urgentes está incluido en el servicio.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cómo es el proceso para empezar a trabajar con Grupo Conta?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Empezamos con una consulta sin cargo para conocer tu situación. A partir de ahí te explicamos qué necesitás y cómo podemos ayudarte. Si decidimos trabajar juntos, nos ocupamos de todo el proceso de alta y organización desde el primer día.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <p class="section-label">Hablemos</p>
+  <h2 class="section-title">¿Necesitás un <em>contador</em>?</h2>
+  <div class="divider"></div>
+  <p class="contact-subtitle">Escribinos sin compromiso. Te respondemos rápido y coordinamos una consulta inicial gratuita.</p>
+  <div class="contact-actions">
+    <a href="https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20quiero%20hacer%20una%20consulta%20contable" class="btn-wsp" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      WhatsApp
+    </a>
+    <button onclick="document.getElementById('email-modal').style.display='flex'" style="display:inline-flex;align-items:center;gap:12px;border:2px solid rgba(255,255,255,0.7);background:transparent;color:#fff;padding:17px 38px;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:400;cursor:pointer;font-family:'DM Sans',sans-serif;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      Enviar email
+    </button>
+  </div>
+
+  <!-- Modal email (fuera del contact-actions) -->
+  <div id="email-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:36px 32px;max-width:420px;width:90%;position:relative;border-top:4px solid #1B5C6B;">
+      <button onclick="document.getElementById('email-modal').style.display='none'" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#607066;">&#x2715;</button>
+      <p style="font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:#2D8045;margin-bottom:10px;font-weight:500;">Contacto por email</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:#0F1C18;margin-bottom:20px;">Copiá nuestra dirección de email</p>
+      <div style="display:flex;align-items:center;gap:10px;background:#EEF2F0;padding:14px 16px;border:1px solid rgba(15,28,24,0.12);">
+        <span style="font-size:0.88rem;color:#0F1C18;flex:1;word-break:break-all;">estudiocontablegrupoconta@gmail.com</span>
+        <button onclick="navigator.clipboard.writeText('estudiocontablegrupoconta@gmail.com');document.getElementById('copy-msg').style.display='block';setTimeout(()=>document.getElementById('copy-msg').style.display='none',2000)" style="background:#1B5C6B;color:#fff;border:none;padding:8px 14px;font-size:0.75rem;cursor:pointer;white-space:nowrap;letter-spacing:0.06em;text-transform:uppercase;">Copiar</button>
+      </div>
+      <p id="copy-msg" style="display:none;margin-top:10px;font-size:0.8rem;color:#2D8045;text-align:center;">&#10003; Email copiado</p>
+    </div>
+  </div>
+
+  <!-- Instagram -->
+  <div style="margin-top:24px;display:flex;justify-content:center;">
+    <a href="https://www.instagram.com/estudiocontablegrupoconta" target="_blank"
+       style="display:inline-flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.82rem;letter-spacing:0.08em;text-transform:uppercase;border:2px solid rgba(255,255,255,0.3);padding:14px 28px;transition:border-color 0.3s,color 0.3s;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+      @estudiocontablegrupoconta
+    </a>
+  </div>
+
+  <div class="contact-info">
+    <div class="contact-info-item">
+      <p class="contact-info-label">Ubicación</p>
+      <p class="contact-info-value">Av. 38 N° 829 e/ 11 y 12, La Plata</p>
+    </div>
+    <div class="contact-info-item">
+      <p class="contact-info-label">Horario</p>
+      <p class="contact-info-value">Lun – Vie · 9 a 18 hs</p>
+    </div>
+    <div class="contact-info-item">
+      <p class="contact-info-label">Matrícula</p>
+      <p class="contact-info-value">CPCECABA · CPBA</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAPA -->
+<div style="width:100%;margin-top:56px;">
+  <iframe
+    src="https://maps.google.com/maps?q=Av.+38+829,+La+Plata,+Buenos+Aires,+Argentina&output=embed&z=16"
+    width="100%"
+    height="280"
+    style="border:0;display:block;filter:grayscale(30%) contrast(1.05);"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Grupo Conta</span>
+  <a href="https://www.instagram.com/estudiocontablegrupoconta" target="_blank"
+     style="display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.72rem;letter-spacing:0.06em;transition:color 0.2s;"
+     onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+    </svg>
+    @estudiocontablegrupoconta
+  </a>
+  <p>© 2026 Grupo Conta · Estudio Contable · CPCECABA · CPBA</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    // Cerrar todos
+    document.querySelectorAll('.faq-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-answer').style.maxHeight = '0';
+      i.querySelector('.faq-answer').style.padding = '0';
+    });
+    // Abrir el actual si estaba cerrado
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+</script>
+<!-- BOTÓN FLOTANTE WHATSAPP -->
+<a href="https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20quiero%20hacer%20una%20consulta%20contable"
+   target="_blank"
+   rel="noopener noreferrer"
+   onclick="window.open('https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20quiero%20hacer%20una%20consulta%20contable','_blank');return false;"
+   style="
+     position: fixed;
+     bottom: 28px;
+     right: 28px;
+     z-index: 9999;
+     width: 58px;
+     height: 58px;
+     border-radius: 50%;
+     background: #25D366;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+     cursor: pointer;
+     transition: transform 0.2s, box-shadow 0.2s;
+     text-decoration: none;
+   "
+   onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 22px rgba(0,0,0,0.32)'"
+   onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.25)'"
+   aria-label="Contactar por WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+</body>
+</html>
