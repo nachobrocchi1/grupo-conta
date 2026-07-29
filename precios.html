@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light"/>
+  <meta name="supported-color-schemes" content="light"/>
+  <title>Planes | Grupo Conta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal:   #1B5C6B;
+      --teal-d: #124450;
+      --teal-l: #E3F0F3;
+      --green:  #2D8045;
+      --ink:    #0F1C18;
+      --muted:  #1A2E24;
+      --line:   rgba(27,92,107,0.12);
+      --bg:     #F0F5F3;
+      --white:  #ffffff;
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: #F0F5F3 !important;
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo { font-family: var(--sans); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: #fff; text-decoration: none; padding: 10px 22px; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: background 0.2s; }
+    .nav-cta:hover { background: var(--teal-d); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 88px 24px 72px;
+      max-width: 680px;
+      margin: 0 auto;
+      background: #F0F5F3;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 20px; font-weight: 500;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5vw, 4.8rem);
+      font-weight: 300; line-height: 1.06;
+      color: #0F1C18 !important; margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--teal); }
+    .hero-sub {
+      font-size: 1rem; color: #1A2E24 !important;
+      max-width: 480px; margin: 0 auto 12px; line-height: 1.8;
+    }
+    .hero-nota {
+      font-size: 0.78rem; color: var(--teal);
+      letter-spacing: 0.04em; margin-top: 8px;
+    }
+
+    /* TOGGLE */
+    .toggle-wrap {
+      display: flex; justify-content: center; align-items: center;
+      gap: 14px; margin-bottom: 56px;
+      background: #F0F5F3; padding: 0 16px;
+    }
+    .toggle-label { font-size: 0.82rem; color: #1A2E24 !important; }
+    .toggle-label.active { color: #0F1C18 !important; font-weight: 500; }
+    .toggle {
+      width: 48px; height: 26px; background: var(--teal);
+      border-radius: 13px; position: relative; cursor: pointer;
+      border: none; transition: background 0.2s;
+    }
+    .toggle-thumb {
+      width: 20px; height: 20px; background: #fff; border-radius: 50%;
+      position: absolute; top: 3px; left: 3px;
+      transition: transform 0.2s; pointer-events: none;
+    }
+    .toggle.anual .toggle-thumb { transform: translateX(22px); }
+    .badge-ahorro {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; background: var(--green); color: #fff;
+      padding: 3px 8px; border-radius: 20px;
+    }
+
+    /* PLANES */
+    #planes { background: #F0F5F3; padding: 0 0 0; }
+    .planes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-width: 1060px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+      border: 1px solid var(--line);
+    }
+
+    .plan {
+      background: #ffffff !important;
+      color: #0F1C18 !important;
+      padding: 44px 36px;
+      border-right: 1px solid var(--line);
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .plan:last-child { border-right: none; }
+    .plan.destacado {
+      background: var(--teal);
+      color: #fff;
+    }
+    .plan.destacado .plan-desc,
+    .plan.destacado .feature-item,
+    .plan.destacado .plan-nota { color: rgba(255,255,255,0.90); }
+    .plan.destacado .feature-item::before { color: #7ECFA0; }
+    .plan.destacado .plan-precio { color: #fff; }
+    .plan.destacado .plan-periodo { color: rgba(255,255,255,0.85); }
+    .plan.destacado .plan-divider { border-color: rgba(255,255,255,0.15); }
+
+    .plan-tag {
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.16em;
+      text-transform: uppercase; margin-bottom: 20px; display: block;
+      color: var(--green);
+    }
+    .plan.destacado .plan-tag { color: #7ECFA0; }
+
+    .plan-popular {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; background: var(--green); color: #fff;
+      padding: 4px 14px; border-radius: 20px; white-space: nowrap;
+    }
+
+    .plan-nombre {
+      font-family: var(--serif); font-size: 1.9rem; font-weight: 400;
+      margin-bottom: 8px; color: inherit;
+    }
+    .plan-desc {
+      font-size: 0.84rem; color: #1A2E24 !important; margin-bottom: 28px; line-height: 1.6;
+    }
+    .plan-divider { border: none; border-top: 1px solid var(--line); margin-bottom: 24px; }
+
+    .plan-precio-wrap { margin-bottom: 28px; }
+    .plan-precio {
+      font-family: var(--serif); font-size: 3.2rem; font-weight: 400;
+      color: var(--teal); line-height: 1;
+    }
+    .plan.destacado .plan-precio { color: #fff; }
+    .plan-moneda { font-size: 1.4rem; vertical-align: top; margin-top: 6px; display: inline-block; }
+    .plan-periodo { font-size: 0.78rem; color: #1A2E24 !important; margin-top: 4px; }
+    .plan-anual { font-size: 0.76rem; color: var(--green); margin-top: 2px; }
+    .plan.destacado .plan-anual { color: #7ECFA0; }
+
+    .feature-list { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 10px; }
+    .feature-item {
+      font-size: 0.86rem; color: #1A2E24 !important;
+      display: flex; align-items: flex-start; gap: 10px; line-height: 1.5;
+    }
+    .feature-item::before {
+      content: '✓'; color: var(--green); font-weight: 500;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .feature-item.no::before { content: '—'; color: var(--line); }
+
+    .btn-plan {
+      display: block; width: 100%; padding: 14px;
+      text-align: center; text-decoration: none;
+      font-family: var(--sans); font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border: 1.5px solid var(--teal); color: var(--teal);
+      background: transparent; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-plan:hover { background: var(--teal); color: #fff; }
+    .plan.destacado .btn-plan {
+      background: #fff; color: var(--teal); border-color: #fff;
+    }
+    .plan.destacado .btn-plan:hover { background: rgba(255,255,255,0.9); }
+
+    .plan-nota { font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 14px; }
+
+    /* COMPARATIVA */
+    .compare-section {
+      max-width: 900px; margin: 0 auto 80px; padding: 0 24px;
+      background: #F0F5F3;
+    }
+    .compare-title {
+      font-family: var(--serif); font-size: 1.8rem; font-weight: 300;
+      color: #0F1C18 !important; text-align: center; margin-bottom: 8px;
+    }
+    .compare-sub { text-align: center; font-size: 0.86rem; color: #1A2E24 !important; margin-bottom: 36px; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .compare-table th {
+      padding: 14px 16px; text-align: center; font-size: 0.72rem;
+      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #1A2E24 !important; border-bottom: 1px solid var(--line);
+      background: #F0F5F3 !important;
+    }
+    .compare-table th:first-child { text-align: left; }
+    .compare-table th.th-destacado { background: var(--teal); color: #fff; border-radius: 0; }
+    .compare-table td {
+      padding: 13px 16px; border-bottom: 1px solid var(--line);
+      text-align: center; color: #1A2E24 !important; background: #ffffff !important;
+    }
+    .compare-table td:first-child { text-align: left; color: #0F1C18 !important; font-weight: 400; background: #ffffff !important; }
+    .compare-table td.td-dest { background: rgba(27,92,107,0.05); }
+    .check { color: var(--green); font-weight: 500; }
+    .cross { color: var(--line); }
+    .cat-row td {
+      background: #F0F5F3 !important; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #1B5C6B !important;
+      padding: 10px 16px;
+    }
+
+    /* GARANTIAS */
+    .garantias {
+      background: #ffffff !important; border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 60px 24px; margin-bottom: 80px;
+    }
+    .garantias-inner { max-width: 900px; margin: 0 auto; }
+    .garantias-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; text-align: center; margin-bottom: 40px; }
+    .garantias-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .garantia-item { text-align: center; }
+    .garantia-icono {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--teal-l); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px; font-size: 1.2rem; color: var(--teal);
+    }
+    .garantia-titulo { font-weight: 500; font-size: 0.9rem; color: #0F1C18 !important; margin-bottom: 6px; }
+    .garantia-desc { font-size: 0.82rem; color: #1A2E24 !important; line-height: 1.6; }
+
+    /* FAQ */
+    .faq-section { max-width: 680px; margin: 0 auto 80px; padding: 0 24px; background: #F0F5F3; }
+    .faq-title { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; text-align: center; margin-bottom: 36px; }
+    .faq-item { border-bottom: 1px solid var(--line); background: #F0F5F3 !important; }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 0; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+      color: #0F1C18 !important; background: #F0F5F3 !important; border: none; width: 100%; text-align: left;
+      gap: 16px;
+    }
+    .faq-icon { color: var(--teal); font-size: 1.2rem; flex-shrink: 0; transition: transform 0.3s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-a p { font-size: 0.86rem; color: #1A2E24 !important; line-height: 1.75; padding-bottom: 18px; }
+
+    /* CTA FINAL */
+    .cta-final {
+      background: var(--teal); color: #fff;
+      text-align: center; padding: 80px 24px;
+    }
+    .cta-final h2 { font-family: var(--serif); font-size: clamp(2rem,4vw,3rem); font-weight: 300; margin-bottom: 14px; }
+    .cta-final h2 em { font-style: italic; color: #A8E6C0; }
+    .cta-final p { font-size: 0.95rem; color: rgba(255,255,255,0.75); max-width: 420px; margin: 0 auto 36px; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-wsp {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25D366; color: #fff; text-decoration: none;
+      padding: 15px 32px; font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase; transition: background 0.2s;
+    }
+    .btn-wsp:hover { background: #1dad54; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1.5px solid rgba(255,255,255,0.5); color: rgba(255,255,255,0.85);
+      text-decoration: none; padding: 15px 32px; font-size: 0.82rem;
+      font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: #fff; color: #fff; }
+
+    footer {
+      background: var(--teal-d); padding: 22px 48px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    footer p { font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.05em; }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.7rem; }
+
+    @media (max-width: 860px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .nav-cta { padding: 9px 16px; font-size: 0.74rem; }
+
+      .hero { padding: 56px 20px 44px; }
+      .hero h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .hero-sub { font-size: 0.95rem; }
+
+      .toggle-wrap { flex-wrap: wrap; gap: 10px; padding: 0 20px; }
+
+      .planes-grid {
+        grid-template-columns: 1fr;
+        border: none;
+        padding: 0 16px;
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+      .plan {
+        border-right: none;
+        border: 1px solid var(--line);
+        padding: 32px 24px;
+      }
+      .plan.destacado { border: 2px solid var(--teal); }
+      .plan-popular { font-size: 0.62rem; }
+      .plan-nombre { font-size: 1.6rem; }
+      .plan-precio { font-size: 2.6rem; }
+
+      .garantias { padding: 48px 20px; }
+      .garantias-grid { grid-template-columns: 1fr; gap: 28px; }
+
+      .compare-section { padding: 0 16px; overflow-x: auto; }
+      .compare-table { font-size: 0.78rem; min-width: 520px; }
+
+      .faq-section { padding: 0 16px; }
+
+      .cta-final { padding: 56px 20px; }
+      .cta-btns { flex-direction: column; align-items: center; }
+      .btn-wsp, .btn-ghost { width: 100%; max-width: 320px; justify-content: center; }
+
+      footer { padding: 18px 20px; flex-direction: column; text-align: center; gap: 6px; }
+    }
+
+    @media (max-width: 400px) {
+      .hero h1 { font-size: 2rem; }
+      .plan { padding: 28px 18px; }
+      .plan-precio { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Grupo Conta</a>
+  <ul class="nav-links">
+    <li><a href="#planes">Planes</a></li>
+    <li><a href="#comparativa">Comparativa</a></li>
+    <li><a href="#faq">Preguntas</a></li>
+  </ul>
+  <a class="nav-cta" href="dashboard.html">Acceder al panel</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Herramientas exclusivas · Argentina</p>
+  <h1>El panel contable que <em>nadie más</em> te da</h1>
+  <p class="hero-sub">Dashboard fiscal, simulador de monotributo, gestión de cooperativas y vencimientos automáticos. Hecho por contadores, para contadores y sus clientes.</p>
+  <p class="hero-nota">Primera semana sin cargo · Sin tarjeta requerida</p>
+</section>
+
+<!-- TOGGLE MENSUAL / ANUAL -->
+<div class="toggle-wrap">
+  <span class="toggle-label active" id="lbl-mensual">Mensual</span>
+  <button type="button" class="toggle" id="toggle-periodo" onclick="togglePeriodo()" aria-label="Cambiar período">
+    <div class="toggle-thumb"></div>
+  </button>
+  <span class="toggle-label" id="lbl-anual">Anual</span>
+  <span class="badge-ahorro">2 meses gratis</span>
+</div>
+
+<!-- PLANES -->
+<section id="planes">
+  <div class="planes-grid">
+
+    <!-- PLAN 1: MONOTRIBUTISTA -->
+    <div class="plan">
+      <span class="plan-tag">Para particulares</span>
+      <div class="plan-nombre">Básico</div>
+      <p class="plan-desc">Ideal para monotributistas y autónomos que quieren controlar su situación fiscal mes a mes.</p>
+      <hr class="plan-divider"/>
+      <div class="plan-precio-wrap">
+        <div class="plan-precio"><span class="plan-moneda">$</span><span id="precio-basico">9.900</span></div>
+        <div class="plan-periodo">ARS / mes · por usuario</div>
+        <div class="plan-anual" id="anual-basico" style="display:none;">$99.000/año — ahorrás $19.800</div>
+      </div>
+      <ul class="feature-list">
+        <li class="feature-item">Resumen mensual de ingresos y gastos</li>
+        <li class="feature-item">Gráfico de evolución mensual (6 meses)</li>
+        <li class="feature-item">Categoría de Monotributo automática</li>
+        <li class="feature-item">Alertas de vencimientos personalizadas</li>
+        <li class="feature-item">Historial de 12 meses</li>
+        <li class="feature-item">Simulador fiscal integrado</li>
+        <li class="feature-item no">Módulo de cooperativas</li>
+        <li class="feature-item no">Gestión de asociados</li>
+        <li class="feature-item no">Multi-usuario</li>
+      </ul>
+      <a class="btn-plan" href="https://mpago.la/1xFzTtt" target="_blank">Empezar ahora</a>
+      <p class="plan-nota">7 días de prueba sin cargo</p>
+    </div>
+
+    <!-- PLAN 2: PYME / RI (DESTACADO) -->
+    <div class="plan destacado">
+      <div class="plan-popular">Más elegido</div>
+      <span class="plan-tag">Para empresas</span>
+      <div class="plan-nombre">Profesional</div>
+      <p class="plan-desc">Para pymes y responsables inscriptos que necesitan control de IVA, Ganancias e IIBB.</p>
+      <hr class="plan-divider"/>
+      <div class="plan-precio-wrap">
+        <div class="plan-precio"><span class="plan-moneda">$</span><span id="precio-pro">18.900</span></div>
+        <div class="plan-periodo">ARS / mes · por empresa</div>
+        <div class="plan-anual" id="anual-pro" style="display:none;">$189.000/año — ahorrás $37.800</div>
+      </div>
+      <ul class="feature-list">
+        <li class="feature-item">Todo lo del plan Básico</li>
+        <li class="feature-item">Control de IVA débito y crédito</li>
+        <li class="feature-item">Estimación de Ganancias e IIBB</li>
+        <li class="feature-item">Comparativa RI vs Monotributo</li>
+        <li class="feature-item">Alertas de exclusión de régimen</li>
+        <li class="feature-item">Hasta 3 usuarios por cuenta</li>
+        <li class="feature-item">Exportación de reportes</li>
+        <li class="feature-item no">Módulo de cooperativas</li>
+      </ul>
+      <a class="btn-plan" href="https://mpago.la/1RoLvkY" target="_blank">Empezar ahora</a>
+      <p class="plan-nota">7 días de prueba sin cargo</p>
+    </div>
+
+    <!-- PLAN 3: COOPERATIVA -->
+    <div class="plan">
+      <span class="plan-tag">Para cooperativas</span>
+      <div class="plan-nombre">Cooperativa</div>
+      <p class="plan-desc">El único panel en Argentina pensado específicamente para cooperativas de trabajo y su normativa.</p>
+      <hr class="plan-divider"/>
+      <div class="plan-precio-wrap">
+        <div class="plan-precio"><span class="plan-moneda">$</span><span id="precio-coop">34.900</span></div>
+        <div class="plan-periodo">ARS / mes · por cooperativa</div>
+        <div class="plan-anual" id="anual-coop" style="display:none;">$349.000/año — ahorrás $69.800</div>
+      </div>
+      <ul class="feature-list">
+        <li class="feature-item">Todo lo del plan Profesional</li>
+        <li class="feature-item">Gestión de retiros por asociado</li>
+        <li class="feature-item">Régimen especial Ley 20.337 + RG 4991</li>
+        <li class="feature-item">Cat. A sin impuesto integrado automático</li>
+        <li class="feature-item">Alertas INAES y vencimientos cooperativos</li>
+        <li class="feature-item">Detección de exclusión de monotributo</li>
+        <li class="feature-item">Usuarios ilimitados</li>
+        <li class="feature-item">Soporte prioritario con el estudio</li>
+      </ul>
+      <a class="btn-plan" href="https://mpago.la/2DKcuk5" target="_blank">Empezar ahora</a>
+      <p class="plan-nota">7 días de prueba sin cargo</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARATIVA -->
+<section id="comparativa" class="compare-section">
+  <h2 class="compare-title">Comparativa completa</h2>
+  <p class="compare-sub">Todo lo que incluye cada plan</p>
+  <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:40%;">Funcionalidad</th>
+          <th>Básico</th>
+          <th class="th-destacado">Profesional</th>
+          <th>Cooperativa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="4">Control financiero</td></tr>
+        <tr><td>Resumen mensual</td><td class="check">✓</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Historial de períodos</td><td>12 meses</td><td class="td-dest">Ilimitado</td><td>Ilimitado</td></tr>
+        <tr><td>Exportación de reportes</td><td class="cross">—</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+
+        <tr class="cat-row"><td colspan="4">Impuestos</td></tr>
+        <tr><td>Categoría de Monotributo automática</td><td class="check">✓</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Control de IVA débito / crédito</td><td class="cross">—</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Estimación de Ganancias e IIBB</td><td class="cross">—</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Comparativa RI vs Monotributo</td><td class="cross">—</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Alerta de exclusión de régimen</td><td class="cross">—</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+
+        <tr class="cat-row"><td colspan="4">Vencimientos</td></tr>
+        <tr><td>Alertas de vencimientos</td><td class="check">✓</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Vencimientos INAES y cooperativos</td><td class="cross">—</td><td class="cross td-dest">—</td><td class="check">✓</td></tr>
+
+        <tr class="cat-row"><td colspan="4">Módulo cooperativo</td></tr>
+        <tr><td>Gestión de retiros por asociado</td><td class="cross">—</td><td class="cross td-dest">—</td><td class="check">✓</td></tr>
+        <tr><td>Régimen Ley 20.337 + RG 4991</td><td class="cross">—</td><td class="cross td-dest">—</td><td class="check">✓</td></tr>
+        <tr><td>Cat. A sin imp. integrado automático</td><td class="cross">—</td><td class="cross td-dest">—</td><td class="check">✓</td></tr>
+        <tr><td>Detección de exclusión (Cat. A a K)</td><td class="cross">—</td><td class="cross td-dest">—</td><td class="check">✓</td></tr>
+
+        <tr class="cat-row"><td colspan="4">Cuenta y soporte</td></tr>
+        <tr><td>Usuarios por cuenta</td><td>1</td><td class="td-dest">Hasta 3</td><td>Ilimitados</td></tr>
+        <tr><td>Acceso al simulador fiscal</td><td class="check">✓</td><td class="check td-dest">✓</td><td class="check">✓</td></tr>
+        <tr><td>Soporte con el estudio Grupo Conta</td><td>Email</td><td class="td-dest">Email + WhatsApp</td><td>Prioritario</td></tr>
+        <tr><td>Período de prueba</td><td>7 días</td><td class="td-dest">7 días</td><td>7 días</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- GARANTÍAS -->
+<section class="garantias">
+  <div class="garantias-inner">
+    <h2 class="garantias-title">Lo que garantizamos</h2>
+    <div class="garantias-grid">
+      <div class="garantia-item">
+        <div class="garantia-icono">📋</div>
+        <div class="garantia-titulo">Normativa real y actualizada</div>
+        <div class="garantia-desc">Todos los cálculos se basan en la normativa vigente de Arca, INAES y la Ley 20.337. Actualizamos los valores en cada semestre.</div>
+      </div>
+      <div class="garantia-item">
+        <div class="garantia-icono">🔒</div>
+        <div class="garantia-titulo">Tus datos son tuyos</div>
+        <div class="garantia-desc">Almacenamiento seguro con Supabase. Cada usuario accede solo a sus propios datos. Nunca compartimos información con terceros.</div>
+      </div>
+      <div class="garantia-item">
+        <div class="garantia-icono">🤝</div>
+        <div class="garantia-titulo">Respaldo de un estudio real</div>
+        <div class="garantia-desc">Detrás del panel hay contadores matriculados ante CPBA y CPCECABA. Si el sistema te genera una duda, podés consultarnos directamente.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-section">
+  <h2 class="faq-title">Preguntas frecuentes</h2>
+
+  <div class="faq-item">
+    <button type="button" class="faq-q" onclick="toggleFaq(this)">
+      ¿Necesito ser cliente de Grupo Conta para acceder?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-a"><p>No. El panel es independiente del estudio contable. Podés usarlo aunque tengas otro contador o lleves tu propia contabilidad. Si después querés contratar algún servicio del estudio, podemos coordinarlo desde adentro.</p></div>
+  </div>
+
+  <div class="faq-item">
+    <button type="button" class="faq-q" onclick="toggleFaq(this)">
+      ¿Cómo se actualizan los valores del monotributo?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-a"><p>Actualizamos los topes y cuotas en cada actualización semestral de Arca (enero y agosto). No necesitás hacer nada — el sistema toma los valores nuevos automáticamente.</p></div>
+  </div>
+
+  <div class="faq-item">
+    <button type="button" class="faq-q" onclick="toggleFaq(this)">
+      ¿Qué pasa si mi cooperativa tiene asociados en distintos regímenes?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-a"><p>El módulo de cooperativas calcula el régimen de cada asociado por separado, aplicando la normativa correcta: Cat. A sin impuesto integrado, cuota completa para categorías superiores, y alerta cuando algún asociado supera el tope de Cat. K y debe pasar al Régimen General.</p></div>
+  </div>
+
+  <div class="faq-item">
+    <button type="button" class="faq-q" onclick="toggleFaq(this)">
+      ¿Los datos que cargo reemplazan a mi contador?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-a"><p>No. El panel es una herramienta de control y monitoreo, no de liquidación. Te da visibilidad en tiempo real de tu situación, pero las declaraciones juradas y liquidaciones formales las sigue haciendo tu contador. Si usás Grupo Conta como estudio, el panel complementa el servicio.</p></div>
+  </div>
+
+  <div class="faq-item">
+    <button type="button" class="faq-q" onclick="toggleFaq(this)">
+      ¿Puedo cancelar en cualquier momento?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-a"><p>Sí, sin penalidades ni costos adicionales. Si pagaste un plan anual y cancelás antes, te devolvemos los meses no utilizados. Los datos permanecen disponibles por 30 días después de la cancelación para que puedas exportarlos.</p></div>
+  </div>
+
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>¿Empezamos?</h2>
+  <p>7 días sin cargo, sin tarjeta. Si no es para vos, lo cancelás sin trámites.</p>
+  <div class="cta-btns">
+    <a class="btn-wsp" href="https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20quiero%20info%20sobre%20el%20dashboard" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Consultar por WhatsApp
+    </a>
+    <a class="btn-ghost" href="dashboard.html">Ir al panel</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Grupo Conta · Estudio Contable · CPCECABA · CPBA</p>
+  <a href="index.html">← Volver al sitio</a>
+</footer>
+
+<script>
+  window.onerror = (m, s, l) => { console.warn('Error:', m, l); return true; };
+
+  let esAnual = false;
+
+  const precios = {
+    basico:  { mensual: 9900,  anual: 99000  },
+    pro:     { mensual: 18900, anual: 189000 },
+    coop:    { mensual: 34900, anual: 349000 },
+  };
+
+  function fmt(n) { return n.toLocaleString('es-AR'); }
+
+  function togglePeriodo() {
+    esAnual = !esAnual;
+    const toggle = document.getElementById('toggle-periodo');
+    toggle.classList.toggle('anual', esAnual);
+    document.getElementById('lbl-mensual').classList.toggle('active', !esAnual);
+    document.getElementById('lbl-anual').classList.toggle('active', esAnual);
+
+    if (esAnual) {
+      document.getElementById('precio-basico').textContent = fmt(Math.round(precios.basico.anual / 12));
+      document.getElementById('precio-pro').textContent    = fmt(Math.round(precios.pro.anual / 12));
+      document.getElementById('precio-coop').textContent   = fmt(Math.round(precios.coop.anual / 12));
+      document.getElementById('anual-basico').style.display = 'block';
+      document.getElementById('anual-pro').style.display    = 'block';
+      document.getElementById('anual-coop').style.display   = 'block';
+    } else {
+      document.getElementById('precio-basico').textContent = fmt(precios.basico.mensual);
+      document.getElementById('precio-pro').textContent    = fmt(precios.pro.mensual);
+      document.getElementById('precio-coop').textContent   = fmt(precios.coop.mensual);
+      document.getElementById('anual-basico').style.display = 'none';
+      document.getElementById('anual-pro').style.display    = 'none';
+      document.getElementById('anual-coop').style.display   = 'none';
+    }
+  }
+
+  function toggleFaq(btn) {
+    const item   = btn.parentElement;
+    const answer = item.querySelector('.faq-a');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-a').style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+</script>
+</body>
+</html>
