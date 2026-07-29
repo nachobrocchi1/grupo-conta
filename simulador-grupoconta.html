@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Simulador de categoría de Monotributo y Cooperativas de Trabajo — Grupo Conta, La Plata"/>
+  <title>Simulador Fiscal | Grupo Conta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #E8EEEC;
+      --surface: #D6E2DE;
+      --ink: #142820;
+      --ink-light: #2D3F39;
+      --teal: #1B5C6B;
+      --teal-dark: #124450;
+      --green: #2D8045;
+      --line: rgba(27,92,107,0.12);
+      --serif: 'Cormorant Garamond', serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--teal);
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo {
+      font-family: var(--sans); font-weight: 500;
+      font-size: 1rem; letter-spacing: 0.1em;
+      color: #fff; text-decoration: none; text-transform: uppercase;
+    }
+    .nav-back {
+      font-size: 0.78rem; color: rgba(255,255,255,0.75);
+      text-decoration: none; letter-spacing: 0.06em;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: #fff; }
+
+    /* HERO */
+    .hero {
+      background: var(--teal);
+      color: #fff;
+      text-align: center;
+      padding: 56px 24px 80px;
+    }
+    .hero-label {
+      font-size: 0.7rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: #7ECFA0;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300; line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { font-style: italic; color: #A8E6C0; }
+    .hero p {
+      font-size: 0.95rem; color: rgba(255,255,255,0.75);
+      max-width: 480px; margin: 0 auto;
+    }
+
+    /* MAIN */
+    main {
+      max-width: 860px; margin: -36px auto 60px;
+      padding: 0 20px;
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 3px;
+      background: var(--surface);
+      padding: 4px; border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .tab {
+      flex: 1; padding: 12px 16px;
+      background: none; border: none; cursor: pointer;
+      font-family: var(--sans); font-size: 0.84rem;
+      font-weight: 400; color: var(--ink-light);
+      border-radius: 6px; transition: all 0.2s;
+      text-align: center;
+    }
+    .tab.active {
+      background: var(--teal); color: #fff; font-weight: 500;
+    }
+    .tab:not(.active):hover { background: var(--bg); }
+
+    /* CARD */
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 36px;
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem; font-weight: 400;
+      color: var(--teal); margin-bottom: 6px;
+    }
+    .card-subtitle {
+      font-size: 0.84rem; color: var(--ink-light);
+      margin-bottom: 28px;
+    }
+
+    /* FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--ink-light);
+    }
+    input[type="number"], select {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font-family: var(--sans); font-size: 0.9rem;
+      color: var(--ink); background: var(--bg);
+      outline: none; transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]:focus, select:focus { border-color: var(--teal); }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .btn-simular {
+      width: 100%; padding: 16px;
+      background: var(--teal); color: #fff;
+      border: none; border-radius: 4px;
+      font-family: var(--sans); font-size: 0.88rem;
+      font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-simular:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+    /* RESULTADO */
+    #resultado { display: none; }
+    .resultado-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 24px;
+    }
+    .cat-badge {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--teal); color: #fff;
+      font-family: var(--serif); font-size: 2rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .cat-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; color: var(--ink); }
+    .cat-subtitle { font-size: 0.82rem; color: var(--ink-light); }
+
+    .resultado-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px; margin-bottom: 24px;
+    }
+    .resultado-item {
+      background: var(--bg); padding: 20px 16px; text-align: center;
+    }
+    .resultado-item-label {
+      font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--ink-light); margin-bottom: 6px;
+    }
+    .resultado-item-value {
+      font-family: var(--serif); font-size: 1.6rem;
+      font-weight: 500; color: var(--teal);
+    }
+
+    .alerta {
+      padding: 14px 18px; border-radius: 4px;
+      font-size: 0.86rem; margin-bottom: 14px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .alerta-verde { background: #E8F5ED; border-left: 3px solid var(--green); color: #1A4A28; }
+    .alerta-naranja { background: #FFF3E0; border-left: 3px solid #E67E22; color: #7D4000; }
+    .alerta-roja { background: #FDECEA; border-left: 3px solid #E74C3C; color: #7B1E1E; }
+    .alerta-teal { background: #E3F0F3; border-left: 3px solid var(--teal); color: #0D3340; }
+
+    .divider { width: 100%; height: 1px; background: var(--line); margin: 24px 0; }
+
+    /* TABLA */
+    .tabla-wrap { overflow-x: auto; margin-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    th {
+      background: var(--teal); color: #fff;
+      padding: 10px 12px; text-align: left;
+      font-weight: 500; font-size: 0.74rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    tr.activa td { background: #E3F0F3; font-weight: 500; color: var(--teal); }
+    tr:hover td { background: var(--bg); }
+
+    /* CTA */
+    .cta-box {
+      background: var(--teal); border-radius: 6px;
+      padding: 28px; text-align: center; margin-top: 8px;
+    }
+    .cta-box p { color: rgba(255,255,255,0.85); font-size: 0.9rem; margin-bottom: 16px; }
+    .cta-box a {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25D366; color: #fff;
+      text-decoration: none; padding: 13px 28px;
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 4px; transition: background 0.2s;
+    }
+    .cta-box a:hover { background: #1dad54; }
+
+    /* COOPERATIVA */
+    .info-box {
+      background: #E3F0F3; border-left: 3px solid var(--teal);
+      padding: 16px 18px; border-radius: 0 4px 4px 0;
+      font-size: 0.86rem; color: var(--ink-light);
+      margin-bottom: 20px;
+    }
+    .info-box strong { color: var(--teal); }
+
+    /* FOOTER */
+    footer {
+      background: var(--teal-dark); color: rgba(255,255,255,0.4);
+      text-align: center; padding: 20px;
+      font-size: 0.72rem; letter-spacing: 0.06em;
+    }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .tabs { overflow-x: auto; }
+      .hero { padding: 40px 20px 60px; }
+      .card { padding: 24px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .resultado-grid { grid-template-columns: 1fr 1fr; }
+      .tabs { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Grupo Conta</a>
+  <a class="nav-back" href="index.html">
+    ← Volver al sitio
+  </a>
+</nav>
+
+<div class="hero">
+  <p class="hero-label">Herramienta gratuita</p>
+  <h1>Simulador <em>fiscal</em></h1>
+  <p>Conocé tu categoría de monotributo o analizá la situación de tu cooperativa de trabajo. Datos oficiales de Arca vigentes desde agosto 2026.</p>
+</div>
+
+<main>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button type="button" class="tab active" onclick="switchTab('mono')">Monotributista / Autónomo</button>
+    <button type="button" class="tab" onclick="switchTab('coop')">Cooperativa de trabajo</button>
+    <button type="button" class="tab" onclick="switchTab('ri')">Responsable Inscripto</button>
+  </div>
+
+  <!-- ============ TAB MONOTRIBUTO ============ -->
+  <div id="tab-mono">
+    <div class="card">
+      <h2>Simulador de categoría</h2>
+      <p class="card-subtitle">Ingresá tu facturación anual y tipo de actividad para conocer tu categoría y cuánto pagás por mes.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Facturación anual (últimos 12 meses)</label>
+          <input type="number" id="facturacion" placeholder="Ej: 15000000" min="0" step="1000"/>
+        </div>
+        <div class="form-group">
+          <label>Tipo de actividad</label>
+          <select id="actividad">
+            <option value="servicios">Servicios / Locaciones</option>
+            <option value="bienes">Venta de bienes / Comercio</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>¿Tenés empleados a cargo?</label>
+          <select id="empleados">
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn-simular" onclick="simularMono()">Calcular mi categoría</button>
+    </div>
+
+    <!-- RESULTADO MONO -->
+    <div class="card" id="resultado">
+      <div class="resultado-header">
+        <div class="cat-badge" id="cat-letra" style="background:var(--teal)">A</div>
+        <div>
+          <div class="cat-title" id="cat-nombre">Categoría A</div>
+          <div class="cat-subtitle" id="cat-desc">Servicios</div>
+        </div>
+      </div>
+
+      <div class="resultado-grid">
+        <div class="resultado-item">
+          <div class="resultado-item-label">Cuota mensual</div>
+          <div class="resultado-item-value" id="res-cuota">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">Tope anual</div>
+          <div class="resultado-item-value" id="res-tope">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">Margen restante</div>
+          <div class="resultado-item-value" id="res-margen">—</div>
+        </div>
+      </div>
+
+      <div id="alertas-mono"></div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:1.2rem;color:var(--ink);margin-bottom:16px;">Tabla completa de categorías</h3>
+      <div class="tabla-wrap">
+        <table id="tabla-mono">
+          <thead>
+            <tr>
+              <th>Cat.</th>
+              <th>Tope anual</th>
+              <th>Cuota servicios</th>
+              <th>Cuota bienes</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-mono"></tbody>
+        </table>
+      </div>
+
+      <div class="divider"></div>
+      <div class="cta-box">
+        <p>¿Necesitás analizar tu situación en detalle o evaluar si conviene pasarte a Responsable Inscripto? Consultanos sin cargo.</p>
+        <a href="https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20usé%20el%20simulador%20y%20quiero%20una%20consulta%20sin%20cargo" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Consultar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB COOPERATIVA ============ -->
+  <div id="tab-coop" style="display:none;">
+    <div class="info-box">
+      <strong>¿Sabías que los asociados a cooperativas de trabajo tienen un régimen especial?</strong><br>
+      Pueden inscribirse en Monotributo solo hasta categoría A. Si sus retiros anticipados superan ese tope, deben tributar como autónomos. Analizamos tu situación para que no pagues de más ni tengas problemas con Arca.
+    </div>
+
+    <div class="card">
+      <h2>Simulador cooperativo</h2>
+      <p class="card-subtitle">Analizá la situación fiscal de los asociados y la cooperativa en su conjunto.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Ingresos anuales de la cooperativa ($)</label>
+          <input type="number" id="coop-ingresos" placeholder="Ej: 50000000" min="0" step="1000"/>
+        </div>
+        <div class="form-group">
+          <label>Cantidad de asociados activos</label>
+          <input type="number" id="coop-asociados" placeholder="Ej: 8" min="1" max="999"/>
+        </div>
+        <div class="form-group">
+          <label>Retiro anticipado mensual por asociado ($)</label>
+          <input type="number" id="coop-retiro" placeholder="Ej: 500000" min="0" step="1000"/>
+        </div>
+        <div class="form-group">
+          <label>Actividad principal</label>
+          <select id="coop-actividad">
+            <option value="servicios">Servicios</option>
+            <option value="bienes">Producción / Comercio</option>
+            <option value="construccion">Construcción</option>
+            <option value="limpieza">Limpieza / Mantenimiento</option>
+            <option value="gastro">Gastronomía</option>
+            <option value="otro">Otra</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn-simular" onclick="simularCoop()">Analizar cooperativa</button>
+    </div>
+
+    <!-- RESULTADO COOP -->
+    <div class="card" id="resultado-coop" style="display:none;">
+      <h2 style="margin-bottom:20px;">Análisis de tu cooperativa</h2>
+
+      <div id="alertas-coop"></div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:1.2rem;color:var(--ink);margin-bottom:16px;">Situación de los asociados</h3>
+      <div class="resultado-grid" style="margin-bottom:20px;">
+        <div class="resultado-item">
+          <div class="resultado-item-label">Retiro anual por asociado</div>
+          <div class="resultado-item-value" id="coop-res-anual">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">Régimen sugerido</div>
+          <div class="resultado-item-value" id="coop-res-regimen" style="font-size:1rem;">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">Costo fiscal estimado/mes</div>
+          <div class="resultado-item-value" id="coop-res-costo">—</div>
+        </div>
+      </div>
+
+      <div id="coop-detalle"></div>
+
+      <div class="divider"></div>
+      <div class="cta-box">
+        <p>Las cooperativas de trabajo tienen particularidades que requieren análisis caso a caso. Somos especialistas — consultanos sin cargo.</p>
+        <a href="https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20soy%20de%20una%20cooperativa%20de%20trabajo%20y%20quiero%20una%20consulta%20sin%20cargo" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Consultar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============ TAB RESPONSABLE INSCRIPTO ============ -->
+  <div id="tab-ri" style="display:none;">
+
+    <div class="info-box">
+      <strong>¿Qué es el Responsable Inscripto?</strong><br>
+      Es el régimen general de tributación. A diferencia del Monotributo, el RI liquida IVA y Ganancias por separado. Podés deducir gastos reales y recuperar el IVA de tus compras. <strong>Simulá tu carga fiscal y comparala con el Monotributo.</strong>
+    </div>
+
+    <div class="card">
+      <h2>Simulador de Responsable Inscripto</h2>
+      <p class="card-subtitle">Estimá tu IVA mensual, Ganancias anuales y comparalo con el Monotributo.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Facturación anual ($)</label>
+          <input type="number" id="ri-facturacion" placeholder="Ej: 80000000" min="0" step="1000"/>
+        </div>
+        <div class="form-group">
+          <label>Tipo de actividad</label>
+          <select id="ri-actividad">
+            <option value="servicios">Servicios / Honorarios</option>
+            <option value="bienes">Venta de bienes / Comercio</option>
+            <option value="exportacion">Exportación de servicios</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Gastos deducibles anuales ($)</label>
+          <input type="number" id="ri-gastos" placeholder="Ej: 20000000" min="0" step="1000"/>
+        </div>
+        <div class="form-group">
+          <label>Provincia</label>
+          <select id="ri-provincia">
+            <option value="3.5">Buenos Aires / CABA (3,5%)</option>
+            <option value="4">Interior / otras (4%)</option>
+            <option value="2">Interior reducido (2%)</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn-simular" onclick="simularRI()">Calcular carga fiscal</button>
+    </div>
+
+    <!-- RESULTADO RI -->
+    <div class="card" id="resultado-ri" style="display:none;">
+      <h2 style="margin-bottom:20px;">Tu carga fiscal estimada</h2>
+
+      <div class="resultado-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+        <div class="resultado-item">
+          <div class="resultado-item-label">IVA mensual neto</div>
+          <div class="resultado-item-value" id="ri-res-iva">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">Ganancias anuales</div>
+          <div class="resultado-item-value" id="ri-res-ganancias">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">IIBB mensual</div>
+          <div class="resultado-item-value" id="ri-res-iibb">—</div>
+        </div>
+        <div class="resultado-item">
+          <div class="resultado-item-label">Carga total anual</div>
+          <div class="resultado-item-value" id="ri-res-total">—</div>
+        </div>
+      </div>
+
+      <div id="alertas-ri"></div>
+
+      <div class="divider"></div>
+
+      <!-- Comparativa -->
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:1.2rem;color:var(--ink);margin-bottom:16px;">Comparativa: RI vs Monotributo</h3>
+      <div id="ri-comparativa"></div>
+
+      <div class="divider"></div>
+      <div class="cta-box">
+        <p>El análisis de un Responsable Inscripto requiere revisar tu situación particular, retenciones y deducciones reales. Consultanos sin cargo.</p>
+        <a href="https://wa.me/5492212013379?text=Hola%20Grupo%20Conta%2C%20quiero%20analizar%20mi%20situación%20como%20Responsable%20Inscripto" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Consultar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Datos oficiales de Arca vigentes desde agosto 2026 · Próxima actualización estimada: febrero 2027</p>
+  <p style="margin-top:6px;">⚠️ Esta herramienta es orientativa y no reemplaza el asesoramiento profesional. Para análisis de tu caso puntual consultá a <a href="index.html">Grupo Conta</a>.</p>
+</footer>
+
+<script>
+  // Captura de errores silenciosa — evita que un error JS rompa toda la página
+  window.onerror = function(msg, src, line) {
+    console.warn('Error capturado:', msg, 'línea:', line);
+    return true; // previene el error en consola del usuario
+  };
+  // ============ DATOS MONOTRIBUTO (vigentes desde agosto 2026) ============
+  const categorias = [
+    { cat: 'A', tope: 12009410.45,  servicios: 49527.18,   bienes: 49527.18  },
+    { cat: 'B', tope: 17595182.74,  servicios: 56379.08,   bienes: 56379.08  },
+    { cat: 'C', tope: 24670494.31,  servicios: 66020,      bienes: 64539     },
+    { cat: 'D', tope: 30628651.43,  servicios: 76960,      bienes: 74203     },
+    { cat: 'E', tope: 36028231.33,  servicios: 106850,     bienes: 101890    },
+    { cat: 'F', tope: 45151659.41,  servicios: 140710,     bienes: 129400    },
+    { cat: 'G', tope: 53995798.87,  servicios: 185670,     bienes: 163200    },
+    { cat: 'H', tope: 81924660.37,  servicios: 335820,     bienes: 247500    },
+    { cat: 'I', tope: 91699761.90,  servicios: 548900,     bienes: 330100    },
+    { cat: 'J', tope: 105012519.20, servicios: 983400,     bienes: 476200    },
+    { cat: 'K', tope: 126610838.75, servicios: 1614446.04, bienes: 702103    },
+  ];
+
+  const fmt = n => '$' + Math.round(n).toLocaleString('es-AR');
+  const fmtM = n => (n/1000000).toFixed(1) + 'M';
+
+  function switchTab(tab) {
+    document.getElementById('tab-mono').style.display = tab === 'mono' ? 'block' : 'none';
+    document.getElementById('tab-coop').style.display = tab === 'coop' ? 'block' : 'none';
+    document.getElementById('tab-ri').style.display  = tab === 'ri'   ? 'block' : 'none';
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active',
+        (i === 0 && tab === 'mono') ||
+        (i === 1 && tab === 'coop') ||
+        (i === 2 && tab === 'ri')
+      );
+    });
+  }
+
+  // ============ SIMULADOR MONOTRIBUTO ============
+  function simularMono() {
+    const facturacion = parseFloat(document.getElementById('facturacion').value);
+    const actividad = document.getElementById('actividad').value;
+    const empleados = document.getElementById('empleados').value;
+
+    if (!facturacion || facturacion <= 0) {
+      alert('Por favor ingresá tu facturación anual.');
+      return;
+    }
+
+    // Encontrar categoría
+    let catIdx = categorias.findIndex(c => facturacion <= c.tope);
+    const superaK = facturacion > categorias[10].tope;
+
+    const res = document.getElementById('resultado');
+    const alertasDiv = document.getElementById('alertas-mono');
+    alertasDiv.innerHTML = '';
+
+    if (superaK) {
+      res.style.display = 'block';
+      document.getElementById('cat-letra').textContent = 'RI';
+      document.getElementById('cat-nombre').textContent = 'Responsable Inscripto';
+      document.getElementById('cat-desc').textContent = 'Superás el tope del monotributo';
+      document.getElementById('res-cuota').textContent = '—';
+      document.getElementById('res-tope').textContent = fmt(categorias[10].tope);
+      document.getElementById('res-margen').textContent = '0%';
+      document.querySelector('.cat-badge').style.background = '#E74C3C';
+      alertasDiv.innerHTML = `
+        <div class="alerta alerta-roja">⚠️ <div>Tu facturación <strong>${fmt(facturacion)}</strong> supera el tope máximo del monotributo. Debés inscribirte como <strong>Responsable Inscripto</strong> y liquidar IVA y Ganancias. Consultanos para planificar la transición.</div></div>
+      `;
+      document.getElementById('tbody-mono').innerHTML = '';
+      renderTabla(actividad, -1);
+      res.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    const cat = categorias[catIdx];
+    const cuota = actividad === 'servicios' ? cat.servicios : cat.bienes;
+    const margen = ((cat.tope - facturacion) / cat.tope * 100).toFixed(1);
+    const proxCat = catIdx < 10 ? categorias[catIdx + 1] : null;
+
+    document.getElementById('cat-letra').textContent = cat.cat;
+    document.getElementById('cat-nombre').textContent = `Categoría ${cat.cat}`;
+    document.getElementById('cat-desc').textContent = actividad === 'servicios' ? 'Servicios / Locaciones' : 'Venta de bienes / Comercio';
+    document.getElementById('res-cuota').textContent = fmt(cuota);
+    document.getElementById('res-tope').textContent = fmtM(cat.tope);
+    document.getElementById('res-margen').textContent = margen + '%';
+    document.querySelector('.cat-badge').style.background = 'var(--teal)';
+
+    // Alertas
+    let html = '';
+    if (margen < 10) {
+      html += `<div class="alerta alerta-roja">⚠️ <div>Estás muy cerca del tope de tu categoría (${margen}% restante). Si superás ${fmt(cat.tope)} debés recategorizarte ${proxCat ? `a Categoría ${proxCat.cat}` : 'a Responsable Inscripto'}. <strong>Revisá tus números antes del 5 de agosto.</strong></div></div>`;
+    } else if (margen < 25) {
+      html += `<div class="alerta alerta-naranja">⚠️ <div>Tenés un margen ajustado (${margen}%). Monitoreá tu facturación mensual para no exceder ${fmt(cat.tope)} anuales.</div></div>`;
+    } else {
+      html += `<div class="alerta alerta-verde">✓ <div>Tu facturación está dentro del rango de Categoría ${cat.cat} con un margen cómodo del ${margen}%. Próxima recategorización: <strong>antes del 5 de agosto</strong>.</div></div>`;
+    }
+
+    if (empleados === 'si') {
+      html += `<div class="alerta alerta-teal">ℹ️ <div>Si tenés empleados, la categoría mínima puede verse afectada. Las cargas sociales de tus empleados no se incluyen en la cuota del monotributo — se pagan por separado.</div></div>`;
+    }
+
+    // Cuota anual
+    const cuotaAnual = cuota * 12;
+    html += `<div class="alerta alerta-teal">💰 <div>Tu costo fiscal anual estimado es <strong>${fmt(cuotaAnual)}</strong> (${fmt(cuota)}/mes). Esto representa el ${((cuotaAnual/facturacion)*100).toFixed(1)}% de tu facturación.</div></div>`;
+
+    alertasDiv.innerHTML = html;
+    renderTabla(actividad, catIdx);
+    res.style.display = 'block';
+    setTimeout(() => res.scrollIntoView({ behavior: 'smooth' }), 50);
+  }
+
+  function renderTabla(actividad, catActiva) {
+    const tbody = document.getElementById('tbody-mono');
+    tbody.innerHTML = categorias.map((c, i) => `
+      <tr class="${i === catActiva ? 'activa' : ''}">
+        <td><strong>${c.cat}</strong>${i === catActiva ? ' ◀' : ''}</td>
+        <td>${fmt(c.tope)}</td>
+        <td>${fmt(c.servicios)}</td>
+        <td>${fmt(c.bienes)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ============ SIMULADOR COOPERATIVA ============
+  function simularCoop() {
+    const ingresos = parseFloat(document.getElementById('coop-ingresos').value);
+    const asociados = parseInt(document.getElementById('coop-asociados').value);
+    const retiroMensual = parseFloat(document.getElementById('coop-retiro').value);
+
+    if (!ingresos || !asociados || !retiroMensual) {
+      alert('Por favor completá todos los campos.');
+      return;
+    }
+
+    const retiroAnual = retiroMensual * 12;
+    const topeMonoA = categorias[0].tope; // Solo pueden ir hasta Cat A
+    const cuotaMonoA = categorias[0].servicios;
+
+    const alertasDiv = document.getElementById('alertas-coop');
+    const detalleDiv = document.getElementById('coop-detalle');
+    alertasDiv.innerHTML = '';
+    detalleDiv.innerHTML = '';
+
+    document.getElementById('coop-res-anual').textContent = fmt(retiroAnual);
+
+    let regimen, costo, html = '', detalle = '';
+
+    if (retiroAnual <= topeMonoA) {
+      // Puede ir como Monotributo Cat A
+      regimen = 'Monotributo Cat. A';
+      costo = cuotaMonoA;
+      document.getElementById('coop-res-regimen').textContent = regimen;
+      document.getElementById('coop-res-costo').textContent = fmt(costo);
+
+      html += `<div class="alerta alerta-verde">✓ <div>Los retiros anuales de cada asociado (<strong>${fmt(retiroAnual)}</strong>) están dentro del tope de Categoría A (<strong>${fmt(topeMonoA)}</strong>). Pueden inscribirse como monotributistas Cat. A — es el régimen más simple y económico.</div></div>`;
+      html += `<div class="alerta alerta-teal">ℹ️ <div>Cada asociado paga <strong>${fmt(cuotaMonoA)}/mes</strong> de cuota. Para ${asociados} asociados, el costo fiscal total del grupo es <strong>${fmt(cuotaMonoA * asociados)}/mes</strong>.</div></div>`;
+
+      detalle = `
+        <div style="background:var(--bg);padding:20px;border-radius:4px;">
+          <h4 style="font-family:var(--serif);font-weight:400;font-size:1.1rem;color:var(--ink);margin-bottom:12px;">Resumen para la cooperativa</h4>
+          <table style="width:100%;border-collapse:collapse;font-size:0.84rem;">
+            <tr><td style="padding:8px 0;border-bottom:1px solid var(--line);color:var(--ink-light);">Ingresos anuales cooperativa</td><td style="padding:8px 0;border-bottom:1px solid var(--line);font-weight:500;text-align:right;">${fmt(ingresos)}</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid var(--line);color:var(--ink-light);">Retiro por asociado / mes</td><td style="padding:8px 0;border-bottom:1px solid var(--line);font-weight:500;text-align:right;">${fmt(retiroMensual)}</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid var(--line);color:var(--ink-light);">Régimen sugerido</td><td style="padding:8px 0;border-bottom:1px solid var(--line);font-weight:500;text-align:right;color:var(--green);">Monotributo Cat. A</td></tr>
+            <tr><td style="padding:8px 0;border-bottom:1px solid var(--line);color:var(--ink-light);">Cuota por asociado</td><td style="padding:8px 0;border-bottom:1px solid var(--line);font-weight:500;text-align:right;">${fmt(cuotaMonoA)}/mes</td></tr>
+            <tr><td style="padding:8px 0;color:var(--ink-light);">Costo fiscal total del grupo</td><td style="padding:8px 0;font-weight:500;text-align:right;color:var(--teal);">${fmt(cuotaMonoA * asociados)}/mes</td></tr>
+          </table>
+        </div>
+      `;
+
+    } else {
+      // Supera Cat A — debe tributar como autónomo
+      regimen = 'Autónomo';
+      costo = retiroMensual * 0.17; // estimación aporte autónomo ~17%
+      document.getElementById('coop-res-regimen').textContent = regimen;
+      document.getElementById('coop-res-costo').textContent = fmt(costo) + ' aprox.';
+
+      html += `<div class="alerta alerta-naranja">⚠️ <div>Los retiros anuales de cada asociado (<strong>${fmt(retiroAnual)}</strong>) superan el tope de Categoría A del monotributo (<strong>${fmt(topeMonoA)}</strong>). Los asociados deben inscribirse como <strong>trabajadores autónomos</strong> y tributar Ganancias e IVA individualmente.</div></div>`;
+      html += `<div class="alerta alerta-teal">ℹ️ <div>En el régimen de autónomos, los aportes jubilatorios se calculan sobre una base imponible definida por Arca. Adicionalmente, si superan el mínimo no imponible de Ganancias, deberán liquidar ese impuesto. <strong>El análisis de cada caso es fundamental para no pagar de más.</strong></div></div>`;
+      html += `<div class="alerta alerta-roja">⚠️ <div>Una cooperativa mal encuadrada puede recibir multas de Arca e INAES. Te recomendamos una consulta con nuestro equipo para revisar la estructura completa.</div></div>`;
+    }
+
+    alertasDiv.innerHTML = html;
+    detalleDiv.innerHTML = detalle;
+
+    const res = document.getElementById('resultado-coop');
+    res.style.display = 'block';
+    setTimeout(() => res.scrollIntoView({ behavior: 'smooth' }), 50);
+  }
+
+  // ============ SIMULADOR RESPONSABLE INSCRIPTO ============
+  // Escala Ganancias persona física 2026 (anual, en pesos)
+  const escalaGanancias = [
+    { desde: 0,           hasta: 1503847,   fijo: 0,        alicuota: 0.05 },
+    { desde: 1503847,     hasta: 3007695,   fijo: 75192,    alicuota: 0.09 },
+    { desde: 3007695,     hasta: 4511542,   fijo: 210885,   alicuota: 0.12 },
+    { desde: 4511542,     hasta: 6015389,   fijo: 391267,   alicuota: 0.15 },
+    { desde: 6015389,     hasta: 9023084,   fijo: 616822,   alicuota: 0.19 },
+    { desde: 9023084,     hasta: 12030779,  fijo: 1188379,  alicuota: 0.23 },
+    { desde: 12030779,    hasta: 18046168,  fijo: 1880253,  alicuota: 0.27 },
+    { desde: 18046168,    hasta: 37137824,  fijo: 3504620,  alicuota: 0.31 },
+    { desde: 37137824,    hasta: Infinity,  fijo: 8286377,  alicuota: 0.35 },
+  ];
+
+  // MNI + Deducción especial 2026 (persona física soltera sin cargas)
+  const DEDUCCIONES_BASE = 5151802 + 13393685; // MNI + Ded. especial
+
+  function calcularGanancias(utilidadNeta) {
+    const baseImponible = Math.max(0, utilidadNeta - DEDUCCIONES_BASE);
+    if (baseImponible <= 0) return 0;
+    for (const tramo of escalaGanancias) {
+      if (baseImponible <= tramo.hasta) {
+        return tramo.fijo + (baseImponible - tramo.desde) * tramo.alicuota;
+      }
+    }
+    return 0;
+  }
+
+  function simularRI() {
+    const facturacion = parseFloat(document.getElementById('ri-facturacion').value);
+    const actividad   = document.getElementById('ri-actividad').value;
+    const gastos      = parseFloat(document.getElementById('ri-gastos').value) || 0;
+    const alicuotaIIBB = parseFloat(document.getElementById('ri-provincia').value) / 100;
+
+    if (!facturacion || facturacion <= 0) {
+      alert('Por favor ingresá tu facturación anual.');
+      return;
+    }
+
+    // IVA
+    // El RI cobra IVA a sus clientes (débito fiscal) y recupera el IVA que pagó en compras (crédito fiscal)
+    // El IVA a pagar = débito fiscal - crédito fiscal
+    const alicuotaIVA = actividad === 'exportacion' ? 0 : 0.21;
+    const ivaDebito  = facturacion * alicuotaIVA;           // IVA que cobrás a tus clientes
+    const ivaCredito = gastos * alicuotaIVA * 0.5;          // IVA que recuperás de tus gastos (estimamos 50% de gastos tienen IVA)
+    const ivaNeto    = Math.max(0, ivaDebito - ivaCredito);  // Lo que efectivamente pagás a Arca
+    const ivaMensual = ivaNeto / 12;
+
+    // Ganancias
+    const utilidadBruta = facturacion - gastos;
+    const aportesAutonomos = 480000; // estimación anual cat I/II
+    const utilidadNeta = Math.max(0, utilidadBruta - aportesAutonomos);
+    const gananciasAnual = calcularGanancias(utilidadNeta);
+    const gananciasEfectiva = facturacion > 0 ? (gananciasAnual / facturacion * 100).toFixed(1) : 0;
+
+    // IIBB
+    const iibbAnual = facturacion * alicuotaIIBB;
+    const iibbMensual = iibbAnual / 12;
+
+    // Total
+    const totalAnual = ivaNeto + gananciasAnual + iibbAnual + aportesAutonomos;
+    const porcentajeCarga = (totalAnual / facturacion * 100).toFixed(1);
+
+    // Mostrar resultados
+    document.getElementById('ri-res-iva').textContent      = fmt(ivaMensual);
+    document.getElementById('ri-res-ganancias').textContent = fmt(gananciasAnual);
+    document.getElementById('ri-res-iibb').textContent     = fmt(iibbMensual);
+    document.getElementById('ri-res-total').textContent    = fmt(totalAnual);
+
+    // Alertas
+    let html = '';
+    html += `<div class="alerta alerta-teal">📊 <div>Tu carga fiscal total estimada es <strong>${fmt(totalAnual)}/año</strong> (${fmt(totalAnual/12)}/mes), representando el <strong>${porcentajeCarga}%</strong> de tu facturación. Incluye IVA neto, Ganancias, IIBB y aportes autónomos.</div></div>`;
+
+    if (actividad === 'exportacion') {
+      html += `<div class="alerta alerta-verde">✓ <div>Como exportador de servicios, el IVA tiene alícuota <strong>0%</strong> — no pagás IVA y podés recuperar el crédito fiscal de tus gastos. Es una de las mayores ventajas del régimen RI para exportadores.</div></div>`;
+    }
+
+    if (gastos / facturacion < 0.2) {
+      html += `<div class="alerta alerta-naranja">⚠️ <div>Tus gastos declarados son bajos (${((gastos/facturacion)*100).toFixed(0)}% de la facturación). Cuantos más gastos deducibles tengas, menor es tu base imponible de Ganancias. Consultanos para identificar todas tus deducciones posibles.</div></div>`;
+    }
+
+    document.getElementById('alertas-ri').innerHTML = html;
+
+    // Comparativa con Monotributo
+    let catMonoIdx = categorias.findIndex(c => facturacion <= c.tope);
+    let compHtml = '';
+
+    if (facturacion > categorias[10].tope) {
+      compHtml = `<div class="alerta alerta-teal">ℹ️ <div>Tu facturación supera el tope del Monotributo (<strong>${fmt(categorias[10].tope)}</strong>). El Responsable Inscripto es <strong>obligatorio</strong> — no es una opción sino una exigencia de Arca.</div></div>`;
+    } else {
+      const catMono = categorias[catMonoIdx];
+      const cuotaMonoAnual = (actividad === 'bienes' ? catMono.bienes : catMono.servicios) * 12;
+      const diferencia = totalAnual - cuotaMonoAnual;
+      const convieneMono = diferencia > 0;
+
+      compHtml = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:16px;">
+          <div class="resultado-item" style="${convieneMono ? 'border-top:3px solid var(--green)' : 'border-top:3px solid var(--teal)'}">
+            <div class="resultado-item-label">Monotributo Cat. ${catMono.cat} / año</div>
+            <div class="resultado-item-value" style="color:var(--green)">${fmt(cuotaMonoAnual)}</div>
+          </div>
+          <div class="resultado-item" style="${!convieneMono ? 'border-top:3px solid var(--green)' : 'border-top:3px solid #E74C3C'}">
+            <div class="resultado-item-label">Responsable Inscripto / año</div>
+            <div class="resultado-item-value" style="color:${!convieneMono ? 'var(--green)' : '#E74C3C'}">${fmt(totalAnual)}</div>
+          </div>
+        </div>
+      `;
+
+      if (convieneMono) {
+        compHtml += `<div class="alerta alerta-verde">✓ <div>Con tu nivel de facturación y gastos actuales, el <strong>Monotributo es más conveniente</strong> — pagás <strong>${fmt(diferencia)} menos por año</strong>. Sin embargo, si tus clientes te piden factura A o tenés muchos gastos con IVA, puede convenir igual el cambio a RI.</div></div>`;
+      } else {
+        compHtml += `<div class="alerta alerta-teal">📊 <div>Con tus gastos actuales, el <strong>Responsable Inscripto podría convenirte</strong> — la diferencia con el Monotributo es <strong>${fmt(Math.abs(diferencia))}/año</strong>. Esto varía mucho según tus deducciones reales. Consultanos para un análisis preciso.</div></div>`;
+      }
+    }
+
+    document.getElementById('ri-comparativa').innerHTML = compHtml;
+
+    const res = document.getElementById('resultado-ri');
+    res.style.display = 'block';
+    setTimeout(() => res.scrollIntoView({ behavior: 'smooth' }), 50);
+  }
+
+</script>
+</body>
+</html>
